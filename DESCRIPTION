@@ -32,3 +32,5 @@ RdMacros: Rdpack
 Suggests: 
     spelling
 Language: en-US
+URL: https://github.com/jackmwolf/tunevt
+BugReports: https://github.com/jackmwolf/tunevt/issues
