@@ -100,9 +100,13 @@ tunevt <- function(
   vt2 <- get_vt2(step2)
   mod <- vt2(z, data, Trt = Trt, Y = Y, theta = theta$theta)
 
+  # MNPP for the original data
+  mnpp <- get_mnpp(z = z, data = data, step2 = step2, Trt = Trt, Y = Y)
+
   re <- list(
     vtmod = mod,
-    theta_null = theta$theta_grid
+    theta_null = theta$theta_grid,
+    mnpp = mnpp
   )
 
   re$call <- cl
