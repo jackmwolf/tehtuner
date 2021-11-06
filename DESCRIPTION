@@ -1,0 +1,34 @@
+Package: tunevt
+Title: Fit and Tune Virtual Twins Models to Detect Heterogeneous Effects
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Jack",
+           family = "Wolf",
+           role = c("aut", "cre"),
+           email = "wolfx681@example.com",
+           comment = c(ORCID = "0000-0002-8919-8740"))
+Description: Implements methods to fit Virtual Twins models (Foster et al. 
+  (2011) <doi:10.1002/sim.4322>) for identifying subgroups with differential
+  effects in the context of clinical trials while controlling the Type I error
+  of falsely detecting a differential effect when the conditional average
+  treatment effect is uniform across the study population.
+License: GPL (>= 3)
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Depends: 
+    R (>= 2.10)
+Imports: 
+    party,
+    glmnet,
+    Rdpack,
+    rpart,
+    stringr,
+    SuperLearner,
+    randomForestSRC,
+    earth
+RdMacros: Rdpack
+Suggests: 
+    spelling
+Language: en-US

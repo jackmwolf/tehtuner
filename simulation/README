@@ -1,0 +1,16 @@
+R code to replicate simulations from Wolf et al. (2021)
+
+runall.sh runs simulations across all six different simulation scenarios for
+each of the four tested Step 1 models.
+
+Cond.R runs 10 simulations for a given data generating scenario and Step 1 model
+for p = 10, 20, 50 covariates and all Step 2 models.
+
+Note that the functions used to fit the Step 2 models are different here than in
+the package tunevt. This is because the simulation study was designed to fit
+multiple Step 2 models at once, which should not be done in practice, in order
+to speed up computation times.
+
+analysis.R aggregates all these results and calculates summary measures for each
+simulated data set (whether or not TEH was detected, the sensitivity and
+specificity, and the MSE).
