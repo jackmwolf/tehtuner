@@ -2,7 +2,7 @@
 % Please edit documentation in R/permute.R
 \name{permute}
 \alias{permute}
-\title{Generate a dataset with permuated treatment indicators}
+\title{Generate a dataset with permuted treatment indicators}
 \usage{
 permute(data, Trt, Y, zbar)
 }
