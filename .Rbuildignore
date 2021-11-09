@@ -3,3 +3,5 @@
 ^LICENSE\.md$
 ^simulation$
 ^data-raw$
+^README\.Rmd$
+^README_cache$

@@ -1,0 +1,126 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+
+library(ggplot2)
+library(Cairo)
+```
+
+# tunevt
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of tunevt is to implement methods to fit Virtual Twins models (Foster 
+et al. (2011)) for identifying subgroups with differential effects in the 
+context of clinical trials while controlling the Type I error of falsely 
+detecting a differential effect when the conditional average treatment effect is
+uniform across the study population.
+
+
+Virtual Twins is a two-step approach to detecting differential treatment
+effects. Subjects' conditional average treatment effects (CATEs) are first
+estimated in Step 1 using a flexible model. Then, a simple and interpretable
+model is fit in Step 2 to model these estimated CATEs as a function of the
+covariates.
+
+The Step 2 model is dependent on some tuning parameter. This parameter is
+selected to control the Type I error rate by permuting the data under the
+null hypothesis of a constant treatment effect and identifying the minimal
+null penalty parameter (MNPP), which is the smallest penalty parameter that
+yields a Step 2 model with no covariate effects. The $1-\alpha$ quantile
+of the distribution of is then used to fit the Step 2 model on the original
+data.
+
+## Installation
+
+`tunevt` is not currently available on [CRAN](https://CRAN.R-project.org).
+
+You can download the development version from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("jackmwolf/tunevt")
+```
+## Example
+
+We consider simulated data from a small clinical trial with 200 subjects.
+Each subject has 10 measured covaraites, 8 continuous and 2 binary.
+
+```{r}
+library(tunevt)
+data("tunevt_example")
+head(tunevt_example)
+```
+
+We will consider a Virtual Twins model using a random forest to estimate the CATEs in Step 1 and then fitting a regression tree on the estimated CATEs in Step 2 with the Type I error rate set at $\alpha = 0.2$.
+
+```{r cache=TRUE}
+set.seed(100)
+vtmod <- tunevt(
+  data = tunevt_example, Y = "Y", Trt = "Trt", step1 = "randomforest",
+  step2 = "rtree", alpha0 = 0.2, p_reps = 100, ntree = 50
+)
+```
+
+The fit Step 2 model can be accessed via
+```{r}
+vtmod$vtmod
+```
+
+(_We note that the true data generating mechanism_ ($Y_i = h(X_i) + T_i g(X_i)$) _included an interaction between the treatment and whether_ $V_1$ _was above its true mean [sample mean `r round(mean(tunevt_example$V1), 2)`] with_ $g(X_i) = c + 4I(V_{1i}>\mu_1)+4V_{9i}$. 
+_So, the procedure did not make a Type I error!_)
+
+We can also look at the null distribution of the MNPP (through `vtmod$theta_null`) and compare `vtmod$mnpp`  $=\widehat\theta$, the MNPP ofour data, to  $\theta_\alpha$, the $1-\alpha$ percentile of the null distribution.
+Since $\widehat\theta > \theta_\alpha$ we ended up with a Step 2 model that included at least one covariate.
+
+```{r dev='CairoPNG', echo = FALSE}
+theta_20 <- quantile(vtmod$theta_null, 1 - 0.2, type = 2)
+
+annotate_df <- data.frame(
+  x = c(vtmod$mnpp, theta_20),
+  label = c("hat(theta)", "theta[alpha]")
+)
+
+ggplot(data = NULL, aes(x = vtmod$theta_null)) +
+  geom_density(fill = "blue", alpha = 0.1) +
+  geom_text(
+    data = annotate_df,
+    aes(x = x, y = 0, label = label), 
+    parse = TRUE, hjust = 0, vjust = 1, nudge_y = Inf, nudge_x = 0.005,
+    size = 10
+  ) +
+  geom_vline(
+    aes(xintercept = vtmod$mnpp),
+    linetype = 2
+    ) +
+  geom_vline(
+    aes(xintercept = theta_20),
+    linetype = 3
+  ) +
+  labs(
+    title = "Null distribution of the Minimal Null Penalty Parameter",
+    x = "Regression Tree Complexity Parameter",
+    y = "Density"
+  ) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1))) +
+  theme_classic() +
+  theme(
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank()
+  )
+```
+
+## References
+
+- Foster, J. C., Taylor, J. M., & Ruberg, S. J. (2011). Subgroup identification from randomized clinical trial data. _Statistics in Medicine, 30_(24), 2867–2880. https://doi.org/10.1002/sim.4322
