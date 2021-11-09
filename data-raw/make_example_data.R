@@ -48,25 +48,6 @@ ar1_cor <- function(n, rho) {
 
 
 ### Covariate main effects ----
-h1 <- function(X, p, m) {
-  if (p == 10) {
-    # 10 main effects, 8 continuous, 2 binary
-    y0 <- X %*% c(rep(1.25,10))
-
-  } else if (p == 20) {
-    # 12 main effects, 10 continuous, 2 binary
-    y0 <- X %*% c(rep(1,10), rep(0,6), rep(1,2), rep(0,2) )
-
-  } else if (p == 50) {
-    # 15 main effects, 12 continuous, 3 binary
-    y0 <- X %*% c(rep(1,12), rep(0,28), rep(1,3), rep(0,7) )
-
-  } else {
-    stop("Argument 'p' can only be 10, 20, or 50.")
-  }
-  drop(y0)
-}
-
 h2 <- function(X, p, m) {
   if (p == 10) {
     # 10 main effects, 8 continuous, 2 binary
@@ -108,45 +89,22 @@ h2 <- function(X, p, m) {
 }
 
 ### Treatment effects ----
-g0 <- function(X, p, m) {
-  d <- 2
-  d
-}
-
-g1 <- function(X, p, m) {
-  if (p == 10) {
-    # 2 predictive covariates
-    d <- X[, 1] + X[, 9]
-
-  } else if (p == 20) {
-    # 4 predictive covariates
-    d <- X[, 1] + X[, 2] + X[, 10] + X[, 17]
-
-  } else if (p == 50) {
-    # 4 predictive covariates, same as p == 20 case
-    d <- X[, 1] + X[, 2] + X[, 10] + X[, 41]
-
-  } else {
-    stop("Argument 'p' can only be 10, 20, or 50.")
-  }
-  drop(drop(d - mean(d) + 2))
-}
 
 g2 <- function(X, p, m) {
   if (p == 10) {
     # 2 predictive covariates
-    a <- 2
+    a <- 4
     d <- a * (X[, 1] > m[1]) + X[, 9]
 
   } else if (p == 20) {
     # 4 predictive covariates
-    a <- 2
+    a <- 4
     d <- a * (X[, 1] > m[1]) + a/2 * (X[, 2] > m[2]) +
       a/4 * (X[, 10] > m[10]) + X[, 17]
 
   } else if (p == 50) {
     # 4 predictive covariates, same as p == 20 case
-    a <- 2
+    a <- 4
     d <- a * (X[, 1] > m[1]) + a/2 * (X[, 2] > m[2]) +
       a/4 * (X[, 10] > m[10]) + X[, 41]
 
@@ -158,5 +116,5 @@ g2 <- function(X, p, m) {
 
 # Simulate data ---
 set.seed(1000)
-tunevt_example <- dg0(p = 10, h = h2, g = g1)
+tunevt_example <- dg0(p = 10, h = h2, g = g2)
 save(tunevt_example, file = "data/tunevt_example.rda")
