@@ -81,7 +81,7 @@ vtmod$vtmod
 (_We note that the true data generating mechanism_ ($Y_i = h(X_i) + T_i g(X_i)$) _included an interaction between the treatment and whether_ $V_1$ _was above its true mean [sample mean `r round(mean(tunevt_example$V1), 2)`] with_ $g(X_i) = c + 4I(V_{1i}>\mu_1)+4V_{9i}$. 
 _So, the procedure did not make a Type I error!_)
 
-We can also look at the null distribution of the MNPP (through `vtmod$theta_null`) and compare `vtmod$mnpp`  $=\widehat\theta$, the MNPP ofour data, to  $\theta_\alpha$, the $1-\alpha$ percentile of the null distribution.
+We can also look at the null distribution of the MNPP (through `vtmod$theta_null`) and compare `vtmod$mnpp`  $=\widehat\theta$, the MNPP of our data, to  $\theta_\alpha$, the $1-\alpha$ percentile of the null distribution.
 Since $\widehat\theta > \theta_\alpha$ we ended up with a Step 2 model that included at least one covariate.
 
 ```{r dev='CairoPNG', echo = FALSE}

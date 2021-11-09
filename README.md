@@ -91,7 +91,7 @@ The fit Step 2 model can be accessed via
 *So, the procedure did not make a Type I error!*)
 
 We can also look at the null distribution of the MNPP (through
-`vtmod$theta_null`) and compare `vtmod$mnpp`  = *θ̂*, the MNPP ofour
+`vtmod$theta_null`) and compare `vtmod$mnpp`  = *θ̂*, the MNPP of our
 data, to *θ*<sub>*α*</sub>, the 1 − *α* percentile of the null
 distribution. Since *θ̂* &gt; *θ*<sub>*α*</sub> we ended up with a Step 2
 model that included at least one covariate.
