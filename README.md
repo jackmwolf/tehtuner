@@ -6,7 +6,7 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of tunevt is to implement methods to fit Virtual Twins models
+The goal of `tunevt` is to implement methods to fit Virtual Twins models
 (Foster et al. (2011)) for identifying subgroups with differential
 effects in the context of clinical trials while controlling the Type I
 error of falsely detecting a differential effect when the conditional
@@ -96,7 +96,7 @@ data, to *θ*<sub>*α*</sub>, the 1 − *α* percentile of the null
 distribution. Since *θ̂* &gt; *θ*<sub>*α*</sub> we ended up with a Step 2
 model that included at least one covariate.
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
+<img src="man/figures/README-mnpp_plot-1.png" width="100%" />
 
 ## References
 

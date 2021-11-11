@@ -21,7 +21,7 @@ library(Cairo)
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of tunevt is to implement methods to fit Virtual Twins models (Foster 
+The goal of `tunevt` is to implement methods to fit Virtual Twins models (Foster 
 et al. (2011)) for identifying subgroups with differential effects in the 
 context of clinical trials while controlling the Type I error of falsely 
 detecting a differential effect when the conditional average treatment effect is
@@ -84,7 +84,7 @@ _So, the procedure did not make a Type I error!_)
 We can also look at the null distribution of the MNPP (through `vtmod$theta_null`) and compare `vtmod$mnpp`  $=\widehat\theta$, the MNPP of our data, to  $\theta_\alpha$, the $1-\alpha$ percentile of the null distribution.
 Since $\widehat\theta > \theta_\alpha$ we ended up with a Step 2 model that included at least one covariate.
 
-```{r dev='CairoPNG', echo = FALSE}
+```{r mnpp_plot, dev='CairoPNG', echo = FALSE}
 theta_20 <- quantile(vtmod$theta_null, 1 - 0.2, type = 2)
 
 annotate_df <- data.frame(
