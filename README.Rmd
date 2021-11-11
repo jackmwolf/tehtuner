@@ -16,18 +16,19 @@ library(ggplot2)
 library(Cairo)
 ```
 
-# tunevt
+# tehtuner
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/jackmwolf/tunevt/workflows/R-CMD-check/badge.svg)](https://github.com/jackmwolf/tunevt/actions)
+[![R-CMD-check](https://github.com/jackmwolf/tehtuner/workflows/R-CMD-check/badge.svg)](https://github.com/jackmwolf/tehtuner/actions)
 <!-- badges: end -->
 
-The goal of `tunevt` is to implement methods to fit Virtual Twins models (Foster 
-et al. (2011)) for identifying subgroups with differential effects in the 
-context of clinical trials while controlling the Type I error of falsely 
+The goal of `tehtuner` is to implement methods to fit models to detect and model
+treatment effect heterogeneity (TEH) while controlling the Type I error of falsely 
 detecting a differential effect when the conditional average treatment effect is
 uniform across the study population.
 
+Currently `tehtuner` supports Virtual Twins models (Foster 
+et al., 2011) for detecting TEH.
 
 Virtual Twins is a two-step approach to detecting differential treatment
 effects. Subjects' conditional average treatment effects (CATEs) are first
@@ -45,13 +46,13 @@ data.
 
 ## Installation
 
-`tunevt` is not currently available on [CRAN](https://CRAN.R-project.org).
+`tehtuner` is not currently available on [CRAN](https://CRAN.R-project.org).
 
 You can download the development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("jackmwolf/tunevt")
+devtools::install_github("jackmwolf/tehtuner")
 ```
 ## Example
 
@@ -59,9 +60,9 @@ We consider simulated data from a small clinical trial with 200 subjects.
 Each subject has 10 measured covaraites, 8 continuous and 2 binary.
 
 ```{r}
-library(tunevt)
-data("tunevt_example")
-head(tunevt_example)
+library(tehtuner)
+data("tehtuner_example")
+head(tehtuner_example)
 ```
 
 We will consider a Virtual Twins model using a random forest to estimate the CATEs in Step 1 and then fitting a regression tree on the estimated CATEs in Step 2 with the Type I error rate set at $\alpha = 0.2$.
@@ -69,7 +70,7 @@ We will consider a Virtual Twins model using a random forest to estimate the CAT
 ```{r cache=TRUE}
 set.seed(100)
 vtmod <- tunevt(
-  data = tunevt_example, Y = "Y", Trt = "Trt", step1 = "randomforest",
+  data = tehtuner_example, Y = "Y", Trt = "Trt", step1 = "randomforest",
   step2 = "rtree", alpha0 = 0.2, p_reps = 100, ntree = 50
 )
 ```
@@ -79,7 +80,7 @@ The fit Step 2 model can be accessed via
 vtmod$vtmod
 ```
 
-(_We note that the true data generating mechanism_ ($Y_i = h(X_i) + T_i g(X_i)$) _included an interaction between the treatment and whether_ $V_1$ _was above its true mean [sample mean `r round(mean(tunevt_example$V1), 2)`] with_ $g(X_i) = c + 4I(V_{1i}>\mu_1)+4V_{9i}$. 
+(_We note that the true data generating mechanism_ ($Y_i = h(X_i) + T_i g(X_i)$) _included an interaction between the treatment and whether_ $V_1$ _was above its true mean [sample mean `r round(mean(tehtuner_example$V1), 2)`] with_ $g(X_i) = c + 4I(V_{1i}>\mu_1)+4V_{9i}$. 
 _So, the procedure did not make a Type I error!_)
 
 We can also look at the null distribution of the MNPP (through `vtmod$theta_null`) and compare `vtmod$mnpp`  $=\widehat\theta$, the MNPP of our data, to  $\theta_\alpha$, the $1-\alpha$ percentile of the null distribution.

@@ -1,18 +1,21 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# tunevt
+# tehtuner
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/jackmwolf/tunevt/workflows/R-CMD-check/badge.svg)](https://github.com/jackmwolf/tunevt/actions)
+[![R-CMD-check](https://github.com/jackmwolf/tehtuner/workflows/R-CMD-check/badge.svg)](https://github.com/jackmwolf/tehtuner/actions)
 <!-- badges: end -->
 
-The goal of `tunevt` is to implement methods to fit Virtual Twins models
-(Foster et al. (2011)) for identifying subgroups with differential
-effects in the context of clinical trials while controlling the Type I
-error of falsely detecting a differential effect when the conditional
-average treatment effect is uniform across the study population.
+The goal of `tehtuner` is to implement methods to fit models to detect
+and model treatment effect heterogeneity (TEH) while controlling the
+Type I error of falsely detecting a differential effect when the
+conditional average treatment effect is uniform across the study
+population.
+
+Currently `tehtuner` supports Virtual Twins models (Foster et al., 2011)
+for detecting TEH.
 
 Virtual Twins is a two-step approach to detecting differential treatment
 effects. Subjects’ conditional average treatment effects (CATEs) are
@@ -30,14 +33,14 @@ model on the original data.
 
 ## Installation
 
-`tunevt` is not currently available on
+`tehtuner` is not currently available on
 [CRAN](https://CRAN.R-project.org).
 
 You can download the development version from
 [GitHub](https://github.com/) with:
 
     # install.packages("devtools")
-    devtools::install_github("jackmwolf/tunevt")
+    devtools::install_github("jackmwolf/tehtuner")
 
 ## Example
 
@@ -45,9 +48,9 @@ We consider simulated data from a small clinical trial with 200
 subjects. Each subject has 10 measured covaraites, 8 continuous and 2
 binary.
 
-    library(tunevt)
-    data("tunevt_example")
-    head(tunevt_example)
+    library(tehtuner)
+    data("tehtuner_example")
+    head(tehtuner_example)
     #>   Trt          Y         V1        V2         V3        V4        V5         V6
     #> 1   0  0.5595756 -1.4112060 -3.874594  0.2231672 1.7721813 -1.428810 -0.1370893
     #> 2   0 -2.6447515 -0.6781110 -3.498075 -1.0145448 1.3024452 -3.615138 -2.5216064
@@ -69,7 +72,7 @@ CATEs in Step 2 with the Type I error rate set at *α* = 0.2.
 
     set.seed(100)
     vtmod <- tunevt(
-      data = tunevt_example, Y = "Y", Trt = "Trt", step1 = "randomforest",
+      data = tehtuner_example, Y = "Y", Trt = "Trt", step1 = "randomforest",
       step2 = "rtree", alpha0 = 0.2, p_reps = 100, ntree = 50
     )
 

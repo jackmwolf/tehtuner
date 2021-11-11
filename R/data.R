@@ -10,4 +10,4 @@
 #'   \item{V1,V2,V3,V4,V5,V6,V7,V8}{Continuous covariates}
 #'   \item{V9,V10}{Binary covariates}
 #' }
-"tunevt_example"
+"tehtuner_example"

@@ -7,7 +7,7 @@ Cond.R runs 10 simulations for a given data generating scenario and Step 1 model
 for p = 10, 20, 50 covariates and all Step 2 models.
 
 Note that the functions used to fit the Step 2 models are different here than in
-the package tunevt. This is because the simulation study was designed to fit
+the package tehtuner. This is because the simulation study was designed to fit
 multiple Step 2 models at once, which should not be done in practice, in order
 to speed up computation times.
 

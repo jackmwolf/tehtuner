@@ -53,14 +53,14 @@
 #'
 #' @references{
 #'
-#'   \insertRef{foster_subgroup_2011}{tunevt}
+#'   \insertRef{foster_subgroup_2011}{tehtuner}
 #'
 #' }
 #'
 #' @examples
-#' data(tunevt_example)
+#' data(tehtuner_example)
 #' tunevt(
-#'   tunevt_example, step1 = "lasso", step2 = "rtree",
+#'   tehtuner_example, step1 = "lasso", step2 = "rtree",
 #'   alpha0 = 0.05, p_reps = 10, keepz = TRUE
 #' )
 #'

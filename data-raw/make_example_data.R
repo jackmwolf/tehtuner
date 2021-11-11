@@ -116,5 +116,5 @@ g2 <- function(X, p, m) {
 
 # Simulate data ---
 set.seed(1000)
-tunevt_example <- dg0(p = 10, h = h2, g = g2)
-save(tunevt_example, file = "data/tunevt_example.rda")
+tehtuner_example <- dg0(p = 10, h = h2, g = g2)
+save(tehtuner_example, file = "data/tehtuner_example.rda")
