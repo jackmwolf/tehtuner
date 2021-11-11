@@ -4,6 +4,8 @@
 # tunevt
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/jackmwolf/tunevt/workflows/R-CMD-check/badge.svg)](https://github.com/jackmwolf/tunevt/actions)
 <!-- badges: end -->
 
 The goal of `tunevt` is to implement methods to fit Virtual Twins models
