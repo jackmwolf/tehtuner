@@ -13,6 +13,8 @@ knitr::opts_chunk$set(
 )
 
 library(ggplot2)
+library(magrittr)
+library(kableExtra)
 library(Cairo)
 ```
 
@@ -62,7 +64,9 @@ Each subject has 10 measured covaraites, 8 continuous and 2 binary.
 ```{r}
 library(tehtuner)
 data("tehtuner_example")
-head(tehtuner_example)
+tehtuner_example %>% 
+  head %>% 
+  kbl(booktabs = TRUE, digits = 2, format = "markdown")
 ```
 
 We will consider a Virtual Twins model using a random forest to estimate the CATEs in Step 1 and then fitting a regression tree on the estimated CATEs in Step 2 with the Type I error rate set at $\alpha = 0.2$.
