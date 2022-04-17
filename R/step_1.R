@@ -143,7 +143,7 @@ vt1_mars <- function(data, Trt, Y, ...) {
 #'
 #' @return Estimated CATEs for each subject in \code{data}.
 #'
-#' @importFrom SuperLearner SuperLearner
+#' @import SuperLearner
 #' @importFrom stats predict
 #'
 #' @family VT Step 1 functions
@@ -156,14 +156,14 @@ vt1_super <- function(data, Trt, Y, SL.library, ...) {
   # Fit Super Learner models
   m0 <- SuperLearner::SuperLearner(
     Y = d0[[Y]],
-    X = data.matrix(subset(d0, select = -c(Y))),
+    X = subset(d0, select = -c(Y)),
     SL.library = SL.library,
     ...
   )
 
   m1 <- SuperLearner::SuperLearner(
     Y = d1[[Y]],
-    X = data.matrix(subset(d1, select = -c(Y))),
+    X = subset(d1, select = -c(Y)),
     SL.library = SL.library,
     ...
   )
@@ -176,7 +176,7 @@ vt1_super <- function(data, Trt, Y, SL.library, ...) {
   )
 
   # Estimated CATE
-  z <- e1 - e0
+  z <- drop(e1$pred - e0$pred)
 
   return(z = z)
 }
