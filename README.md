@@ -88,12 +88,12 @@ The fit Step 2 model can be accessed via
     #>   2) V1< -1.081597 125 1418.895 -0.1780733 *
     #>   3) V1>=-1.081597 75 1361.278  5.4832470 *
 
-(*We note that the true data generating mechanism*
+(We note that the true data generating mechanism
 (*Y*<sub>*i*</sub> = *h*(*X*<sub>*i*</sub>) + *T*<sub>*i*</sub>*g*(*X*<sub>*i*</sub>))
-*included an interaction between the treatment and whether*
-*V*<sub>1</sub> *was above its true mean \[sample mean -1.34\] with*
+included an interaction between the treatment and whether
+*V*<sub>1</sub> was above its true mean \[sample mean -1.34\] with
 *g*(*X*<sub>*i*</sub>) = *c* + 4*I*(*V*<sub>1*i*</sub> &gt; *μ*<sub>1</sub>) + 4*V*<sub>9*i*</sub>.
-*So, the procedure did not make a Type I error!*)
+So, the procedure did not make a Type I error!)
 
 We can also look at the null distribution of the MNPP (through
 `vtmod$theta_null`) and compare `vtmod$mnpp`  = *θ̂*, the MNPP of our
@@ -109,3 +109,8 @@ model that included at least one covariate.
     identification from randomized clinical trial data. *Statistics in
     Medicine, 30*(24), 2867–2880.
     <a href="https://doi.org/10.1002/sim.4322" class="uri">https://doi.org/10.1002/sim.4322</a>
+
+-   Wolf, J. M., Koopmeiners, J. S., & Vock, D. M. (2022+). A
+    permutation procedure to detect heterogeneous treatments effects in
+    randomized clinical trials while controlling the type-I error rate.
+    *Clinical Trials*. (Accepted April 1 2022. To appear.)
