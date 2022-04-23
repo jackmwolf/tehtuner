@@ -10,7 +10,7 @@
 
 The goal of `tehtuner` is to implement methods to fit models to detect
 and model treatment effect heterogeneity (TEH) while controlling the
-Type I error of falsely detecting a differential effect when the
+Type-I error of falsely detecting a differential effect when the
 conditional average treatment effect is uniform across the study
 population.
 
@@ -24,12 +24,13 @@ interpretable model is fit in Step 2 to model these estimated CATEs as a
 function of the covariates.
 
 The Step 2 model is dependent on some tuning parameter. This parameter
-is selected to control the Type I error rate by permuting the data under
+is selected to control the Type-I error rate by permuting the data under
 the null hypothesis of a constant treatment effect and identifying the
 minimal null penalty parameter (MNPP), which is the smallest penalty
 parameter that yields a Step 2 model with no covariate effects. The
 1 − *α* quantile of the distribution of is then used to fit the Step 2
-model on the original data.
+model on the original data. In dong so, the Type-I error rate is
+controlled to be *α*.
 
 ## Installation
 
@@ -46,7 +47,8 @@ You can download the development version from
 
 We consider simulated data from a small clinical trial with 200
 subjects. Each subject has 10 measured covaraites, 8 continuous and 2
-binary.
+binary. We are interested in estimating and understanding the CATE
+through Virtual Twins.
 
     library(tehtuner)
     data("tehtuner_example")
@@ -65,17 +67,19 @@ binary.
 
 We will consider a Virtual Twins model using a random forest to estimate
 the CATEs in Step 1 and then fitting a regression tree on the estimated
-CATEs in Step 2 with the Type I error rate set at *α* = 0.2.
+CATEs in Step 2 with the Type-I error rate set at *α* = 0.2.
 
     set.seed(100)
-    vtmod <- tunevt(
+    vt_cate <- tunevt(
       data = tehtuner_example, Y = "Y", Trt = "Trt", step1 = "randomforest",
       step2 = "rtree", alpha0 = 0.2, p_reps = 100, ntree = 50
     )
 
-The fit Step 2 model can be accessed via
+The fitted Step 2 model can be accessed via `$vtmod`. In this case, as
+we used a regression tree in Step 2, our final model model is of class
+`rpart`.
 
-    vtmod$vtmod
+    vt_cate$vtmod
     #> n= 200 
     #> 
     #> node), split, n, deviance, yval
@@ -85,20 +89,35 @@ The fit Step 2 model can be accessed via
     #>   2) V1< -1.081597 125 1418.895 -0.1780733 *
     #>   3) V1>=-1.081597 75 1361.278  5.4832470 *
 
+The fitted model for the CATE includes a covariate (`V1`), so we would
+conclude that there is treatment effect heterogeneity at the 20% level.
 (We note that the true data generating mechanism
 (*Y*<sub>*i*</sub> = *h*(*X*<sub>*i*</sub>) + *T*<sub>*i*</sub>*g*(*X*<sub>*i*</sub>))
 included an interaction between the treatment and whether
 *V*<sub>1</sub> was above its true mean \[sample mean -1.34\] with
 *g*(*X*<sub>*i*</sub>) = *c* + 4*I*(*V*<sub>1*i*</sub> &gt; *μ*<sub>1</sub>) + 4*V*<sub>9*i*</sub>.
-So, the procedure did not make a Type I error!)
+So, the procedure did not make a Type-I error *and* correctly detected a
+covariate driving this heterogeneity.)
 
-We can also look at the null distribution of the MNPP (through
-`vtmod$theta_null`) and compare `vtmod$mnpp`  = *θ̂*, the MNPP of our
-data, to *θ*<sub>*α*</sub>, the 1 − *α* percentile of the null
-distribution. Since *θ̂* &gt; *θ*<sub>*α*</sub> we ended up with a Step 2
-model that included at least one covariate.
+We can also look at the null distribution of the MNPP through
+`vt_cate$theta_null`. The 80th quantile of *θ̂* under the null hypothesis
+is
 
-<img src="man/figures/README-mnpp_plot-1.png" width="100%" />
+    quantile(vt_cate$theta_null, 0.8)
+    #>       80% 
+    #> 0.2317442
+
+while the MNPP of our observed data is
+
+    vt_cate$mnpp
+    #> [1] 0.3508124
+
+The procedure fit the Step 2 model using the 80th quantile of the null
+distribution which resulted in a model that included covariates since
+the MNPP was above the 80th quantile.
+
+![Histogram showing the null distribution of the MNPP for the example
+data](man/figures/README_mnpp_plot-2.png)
 
 ## References
 

@@ -3,3 +3,6 @@ ggplot2
 tunevt
 Cairo
 tehtuner
+ggtext
+magrittr
+kableExtra

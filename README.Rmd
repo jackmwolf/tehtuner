@@ -1,5 +1,7 @@
 ---
 output: github_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -13,6 +15,7 @@ knitr::opts_chunk$set(
 )
 
 library(ggplot2)
+library(ggtext)
 library(magrittr)
 library(kableExtra)
 library(Cairo)
@@ -25,7 +28,7 @@ library(Cairo)
 <!-- badges: end -->
 
 The goal of `tehtuner` is to implement methods to fit models to detect and model
-treatment effect heterogeneity (TEH) while controlling the Type I error of falsely 
+treatment effect heterogeneity (TEH) while controlling the Type-I error of falsely 
 detecting a differential effect when the conditional average treatment effect is
 uniform across the study population.
 
@@ -39,12 +42,13 @@ model is fit in Step 2 to model these estimated CATEs as a function of the
 covariates.
 
 The Step 2 model is dependent on some tuning parameter. This parameter is
-selected to control the Type I error rate by permuting the data under the
+selected to control the Type-I error rate by permuting the data under the
 null hypothesis of a constant treatment effect and identifying the minimal
 null penalty parameter (MNPP), which is the smallest penalty parameter that
 yields a Step 2 model with no covariate effects. The $1-\alpha$ quantile
 of the distribution of is then used to fit the Step 2 model on the original
 data.
+In dong so, the Type-I error rate is controlled to be $\alpha$.
 
 ## Installation
 
@@ -60,6 +64,7 @@ devtools::install_github("jackmwolf/tehtuner")
 
 We consider simulated data from a small clinical trial with 200 subjects.
 Each subject has 10 measured covaraites, 8 continuous and 2 binary.
+We are interested in estimating and understanding the CATE through Virtual Twins.
 
 ```{r}
 library(tehtuner)
@@ -69,63 +74,71 @@ tehtuner_example %>%
   kbl(booktabs = TRUE, digits = 2, format = "markdown")
 ```
 
-We will consider a Virtual Twins model using a random forest to estimate the CATEs in Step 1 and then fitting a regression tree on the estimated CATEs in Step 2 with the Type I error rate set at $\alpha = 0.2$.
+We will consider a Virtual Twins model using a random forest to estimate the CATEs in Step 1 and then fitting a regression tree on the estimated CATEs in Step 2 with the Type-I error rate set at $\alpha = 0.2$.
 
 ```{r cache=TRUE}
 set.seed(100)
-vtmod <- tunevt(
+vt_cate <- tunevt(
   data = tehtuner_example, Y = "Y", Trt = "Trt", step1 = "randomforest",
   step2 = "rtree", alpha0 = 0.2, p_reps = 100, ntree = 50
 )
 ```
 
-The fit Step 2 model can be accessed via
+The fitted Step 2 model can be accessed via `$vtmod`. 
+In this case, as we used a regression tree in Step 2, our final model model is of class `rpart`.
 ```{r}
-vtmod$vtmod
+vt_cate$vtmod
 ```
 
+The fitted model for the CATE includes a covariate (`V1`), so we would conclude that there is treatment effect heterogeneity at the 20% level. 
 (We note that the true data generating mechanism ($Y_i = h(X_i) + T_i g(X_i)$) included an interaction between the treatment and whether $V_1$ was above its true mean [sample mean `r round(mean(tehtuner_example$V1), 2)`] with $g(X_i) = c + 4I(V_{1i}>\mu_1)+4V_{9i}$. 
-So, the procedure did not make a Type I error!)
+So, the procedure did not make a Type-I error *and* correctly detected a covariate driving this heterogeneity.)
 
-We can also look at the null distribution of the MNPP (through `vtmod$theta_null`) and compare `vtmod$mnpp`  $=\widehat\theta$, the MNPP of our data, to  $\theta_\alpha$, the $1-\alpha$ percentile of the null distribution.
-Since $\widehat\theta > \theta_\alpha$ we ended up with a Step 2 model that included at least one covariate.
-
-```{r mnpp_plot, dev='CairoPNG', echo = FALSE}
-theta_20 <- quantile(vtmod$theta_null, 1 - 0.2, type = 2)
-
-annotate_df <- data.frame(
-  x = c(vtmod$mnpp, theta_20),
-  label = c("hat(theta)", "theta[alpha]")
-)
-
-ggplot(data = NULL, aes(x = vtmod$theta_null)) +
-  geom_density(fill = "blue", alpha = 0.1) +
-  geom_text(
-    data = annotate_df,
-    aes(x = x, y = 0, label = label), 
-    parse = TRUE, hjust = 0, vjust = 1, nudge_y = Inf, nudge_x = 0.005,
-    size = 10
-  ) +
-  geom_vline(
-    aes(xintercept = vtmod$mnpp),
-    linetype = 2
-    ) +
-  geom_vline(
-    aes(xintercept = theta_20),
-    linetype = 3
-  ) +
-  labs(
-    title = "Null distribution of the Minimal Null Penalty Parameter",
-    x = "Regression Tree Complexity Parameter",
-    y = "Density"
-  ) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.1))) +
-  theme_classic() +
-  theme(
-    axis.text.y = element_blank(),
-    axis.ticks.y = element_blank()
-  )
+We can also look at the null distribution of the MNPP through `vt_cate$theta_null`.
+The 80th quantile of $\hat\theta$ under the null hypothesis is
+```{r}
+quantile(vt_cate$theta_null, 0.8)
 ```
+
+while the MNPP of our observed data is
+```{r}
+vt_cate$mnpp
+```
+
+The procedure fit the Step 2 model using the 80th quantile of the null distribution which resulted in a model that included covariates since the MNPP was above the 80th quantile.
+
+```{r mnpp_plot, dev='CairoPNG', echo = FALSE, include = FALSE}
+p <- ggplot(mapping = aes(x = vt_cate$theta_null, y = ..density..)) +
+  geom_histogram(color = "black", fill = "white", binwidth = 0.025) +
+  theme_minimal() +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1))) +
+  geom_vline(
+    aes(xintercept = c(vt_cate$mnpp, quantile(vt_cate$theta_null, 0.8))),
+    color = c("#0072B2", "#D55E00"),
+    size = 2,
+    linetype = 2
+  ) + 
+  labs(
+    y = "Density",
+    x = expression(hat(theta)),
+    title =  expression("Sampling distribution of" ~ hat(theta) ~ "under" ~ H[0]),
+    subtitle = paste0(
+      "<span style='color:#D55E00;'>",
+        "80th quantile (critical value): ", formatC(quantile(vt_cate$theta_null, 0.8), digits = 2, format = "f"),
+      "</span>",
+      "; ",
+      "<span style='color:#0072B2;'>",
+        "Observed MNPP: ", formatC(vt_cate$mnpp, 2, format = "f"), 
+      "</span>"
+      )
+  ) +
+  theme(
+    plot.subtitle = element_markdown(size = 12)
+  )
+ggsave("man/figures/README_mnpp_plot-2.png", plot = p, dpi = 700)
+```
+
+![Histogram showing the null distribution of the MNPP for the example data](man/figures/README_mnpp_plot-2.png)
 
 ## References
 
