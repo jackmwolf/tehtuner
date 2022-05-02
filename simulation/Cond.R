@@ -1,4 +1,7 @@
-#MSI version of VTSims code 4/6/20
+### Run simulations with p = 10, p = 20, and p = 50 under given simulation
+### settings, a given Step 1 model, and all Step 2 models using standard
+### tuning paramater selection and tuning for type I error control at
+### alpha = 0.05 and alpha = 0.20.
 
 source("/panfs/roc/groups/11/koopmein/wolfx681/VT/Chuyu/Scripts/Rcode/Packages.R") #loading packages and CENIC data
 source("/panfs/roc/groups/11/koopmein/wolfx681/VT/Chuyu/Scripts/Rcode/Funcs.R")
@@ -8,10 +11,20 @@ args=(commandArgs(TRUE))
 for(i in 1:length(args)){eval(parse(text=args[[i]]))}
 job = as.numeric(Sys.getenv('SLURM_ARRAY_TASK_ID'))
 
+#for testing the code:
+### job= 1 to 50
+### dg= regDG, corDG, sbDG, imbDG
+### vt1= i.las, i.rf, i.mars, i.super
+# dg <- imbDG
+# vt1 <- i.rf
+# N <- 200
+# sims <- 2
+
 # Added paramaters for model tuning
 alpha <- c(0.05, 0.2)
 p_reps <- 100
 
+# sims <- 2 # 20 here gives 1000 iterations total (sims * number of jobs (50))
 set.seed(as.numeric(job))
 seeds <- round(runif(n = sims, min = 1, max = 10000))
 

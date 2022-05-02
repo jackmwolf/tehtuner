@@ -1,4 +1,4 @@
-R code to replicate simulations from Wolf et al. (2021)
+R code to replicate simulations from Wolf et al. (2022).
 
 runall.sh runs simulations across all six different simulation scenarios for
 each of the four tested Step 1 models.
@@ -13,4 +13,5 @@ to speed up computation times.
 
 analysis.R aggregates all these results and calculates summary measures for each
 simulated data set (whether or not TEH was detected, the sensitivity and
-specificity, and the MSE).
+specificity, and the MSE) and analysis_low_r2.R does the same for simulations
+ran with decreased r-squared values (via runall_r2.sh).
