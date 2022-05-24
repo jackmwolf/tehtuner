@@ -144,4 +144,4 @@ ggsave("man/figures/README_mnpp_plot-2.png", plot = p, dpi = 700)
 
 - Foster, J. C., Taylor, J. M., & Ruberg, S. J. (2011). Subgroup identification from randomized clinical trial data. _Statistics in Medicine, 30_(24), 2867–2880. https://doi.org/10.1002/sim.4322
 
-- Wolf, J. M., Koopmeiners, J. S., & Vock, D. M. (2022+). A permutation procedure to detect heterogeneous treatments effects in randomized clinical trials while controlling the type-I error rate. _Clinical Trials_. (Accepted April 1 2022. To appear.)
+- Wolf, J. M., Koopmeiners, J. S., & Vock, D. M. (2022). A permutation procedure to detect heterogeneous treatment effects in randomized clinical trials while controlling the type-I error rate. _Clinical Trials_. https://doi.org/10.1177/17407745221095855

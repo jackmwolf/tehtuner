@@ -126,7 +126,8 @@ data](man/figures/README_mnpp_plot-2.png)
     Medicine, 30*(24), 2867–2880.
     <a href="https://doi.org/10.1002/sim.4322" class="uri">https://doi.org/10.1002/sim.4322</a>
 
--   Wolf, J. M., Koopmeiners, J. S., & Vock, D. M. (2022+). A
-    permutation procedure to detect heterogeneous treatments effects in
-    randomized clinical trials while controlling the type-I error rate.
-    *Clinical Trials*. (Accepted April 1 2022. To appear.)
+-   Wolf, J. M., Koopmeiners, J. S., & Vock, D. M. (2022). A permutation
+    procedure to detect heterogeneous treatment effects in randomized
+    clinical trials while controlling the type-I error rate. *Clinical
+    Trials*.
+    <a href="https://doi.org/10.1177/17407745221095855" class="uri">https://doi.org/10.1177/17407745221095855</a>
