@@ -71,7 +71,7 @@ get_theta_null <- function(data, Trt, Y, zbar, step1, step2, ...) {
 
   # Estimate CATE on permuted data through Step 1 model
   vt1 <- get_vt1(step1)
-  z <- vt1(data_p, Trt = "Trt", Y = "Y", ...)
+  z <- vt1(data_p, Trt = Trt, Y = Y, ...)
 
 
   theta <- get_mnpp(z, data_p, step2, Trt = Trt, Y = Y)
@@ -121,7 +121,7 @@ get_mnpp <- function(z, data, step2, Trt, Y) {
 #'
 get_mnpp.lasso <- function(z, data, Trt, Y) {
   mod <- glmnet::glmnet(
-    x = data.matrix(subset(data, select = -c(Y, Trt))),
+    x = data.matrix(subset(data, select = !names(data) %in% c(Y, Trt))),
     y = data.matrix(z)
     )
 
@@ -143,7 +143,7 @@ get_mnpp.lasso <- function(z, data, Trt, Y) {
 get_mnpp.rtree <- function(z, data, Trt, Y) {
 
   mod <- rpart::rpart(
-    z ~ ., data = subset(data, select = -c(Y, Trt)),
+    z ~ ., data = subset(data, select = !names(data) %in% c(Y, Trt)),
     method = "anova",
     cp = 0
   )
@@ -207,9 +207,9 @@ get_mnpp.ctree <- function(z, data, Trt, Y) {
 test_null_theta_ctree <- function(theta, z, data, Trt, Y) {
 
   data$z <- z
-
+  keep_x_fit <- !(names(data) %in% c(Y, Trt))
   mod.ctree <- party::ctree(
-    z ~ ., data = subset(data, select = -c(Y, Trt)),
+    z ~ ., data = subset(data, select = keep_x_fit),
     controls = party::ctree_control(
       mincriterion = theta,
       testtype = "Teststatistic")

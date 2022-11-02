@@ -50,10 +50,11 @@
 #'       the null hypothesis.}
 #'     \item{z}{if \code{keepz = TRUE}, the estimated CATEs from the
 #'       \code{step1} model.}
-#'
+#' @importFrom Rdpack reprompt
 #' @references{
 #'
 #'   \insertRef{foster_subgroup_2011}{tehtuner}
+#'
 #'   \insertRef{wolf_permutation_2022}{tehtuner}
 #'
 #' }
@@ -62,7 +63,7 @@
 #' data(tehtuner_example)
 #' tunevt(
 #'   tehtuner_example, step1 = "lasso", step2 = "rtree",
-#'   alpha0 = 0.05, p_reps = 10, keepz = TRUE
+#'   alpha0 = 0.05, p_reps = 10
 #' )
 #'
 #' @export

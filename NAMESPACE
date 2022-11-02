@@ -2,6 +2,7 @@
 
 export(tunevt)
 import(SuperLearner)
+importFrom(Rdpack,reprompt)
 importFrom(earth,earth)
 importFrom(glmnet,cv.glmnet)
 importFrom(glmnet,glmnet)

@@ -18,7 +18,9 @@
 #'     \code{theta}.}
 #'
 vt2_lasso <- function(z, data, Trt, Y, theta) {
-  X <- data.matrix(subset(data, select = -c(Y, Trt)))
+
+  keep_x_fit <- !(names(data) %in% c(Y, Trt))
+  X <- data.matrix(subset(data, select = keep_x_fit))
 
   mod <- glmnet(
     x = X,
@@ -49,8 +51,9 @@ vt2_lasso <- function(z, data, Trt, Y, theta) {
 #'
 vt2_rtree <- function(z, data, Trt, Y, theta) {
 
+  keep_x_fit <- !(names(data) %in% c(Y, Trt))
   mod <- rpart::rpart(
-    z ~ ., data = subset(data, select = -c(Y, Trt)),
+    z ~ ., data = subset(data, select = keep_x_fit),
     method = "anova",
     cp = theta
   )
@@ -77,8 +80,10 @@ vt2_rtree <- function(z, data, Trt, Y, theta) {
 #'
 vt2_ctree <- function(z, data, Trt, Y, theta) {
 
+  data$z <- z
+  keep_x_fit <- !(names(data) %in% c(Y, Trt))
   mod <- party::ctree(
-    z ~ ., data = subset(data, select = -c(Y, Trt)),
+    z ~ ., data = subset(data, select = keep_x_fit),
     controls = party::ctree_control(
       mincriterion = theta,
       testtype = "Teststatistic")

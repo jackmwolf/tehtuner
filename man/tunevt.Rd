@@ -82,7 +82,7 @@ data.
 data(tehtuner_example)
 tunevt(
   tehtuner_example, step1 = "lasso", step2 = "rtree",
-  alpha0 = 0.05, p_reps = 10, keepz = TRUE
+  alpha0 = 0.05, p_reps = 10
 )
 
 }
@@ -90,6 +90,7 @@ tunevt(
 {
 
 \insertRef{foster_subgroup_2011}{tehtuner}
+
 \insertRef{wolf_permutation_2022}{tehtuner}
 
 }

@@ -16,31 +16,34 @@ vt1_lasso <- function(data, Trt, Y, ...) {
   d0 <- subset_trt(data, value = 0, Trt = Trt)
   d1 <- subset_trt(data, value = 1, Trt = Trt)
 
+
+  keep_x_fit <- !(names(d0) %in% c(Y, Trt))
   # Fit glmnet
   m0 <- glmnet::cv.glmnet(
-    x = data.matrix(subset(d0, select = -c(Y))),
+    x = data.matrix(subset(d0, select = keep_x_fit)),
     y = d0[[Y]],
     weights = NULL,
     ...
     )
 
   m1 <- glmnet::cv.glmnet(
-    x = data.matrix(subset(d1, select = -c(Y))),
+    x = data.matrix(subset(d1, select = keep_x_fit)),
     y = d1[[Y]],
     weights = NULL,
     ...
   )
 
+  keep_x_pred <- !(names(d0) %in% c(Y, Trt))
   # Estimated expectation under control and treatment
   e0 <- predict(
     m0,
-    newx = data.matrix(subset(data, select = -c(Y, Trt))),
+    newx = data.matrix(subset(data, select = keep_x_pred)),
     s = "lambda.1se"
     )
 
   e1 <- predict(
     m1,
-    newx = data.matrix(subset(data, select = -c(Y, Trt))),
+    newx = data.matrix(subset(data, select = keep_x_pred)),
     s = "lambda.1se"
   )
 
@@ -153,26 +156,31 @@ vt1_super <- function(data, Trt, Y, SL.library, ...) {
   d0 <- subset_trt(data, value = 0, Trt = Trt)
   d1 <- subset_trt(data, value = 1, Trt = Trt)
 
+  keep_x_fit <- !(names(d0) %in% c(Y, Trt))
+
   # Fit Super Learner models
   m0 <- SuperLearner::SuperLearner(
     Y = d0[[Y]],
-    X = subset(d0, select = -c(Y)),
+    X = subset(d0, select = keep_x_fit),
     SL.library = SL.library,
     ...
   )
 
   m1 <- SuperLearner::SuperLearner(
     Y = d1[[Y]],
-    X = subset(d1, select = -c(Y)),
+    X = subset(d1, select = keep_x_fit),
     SL.library = SL.library,
     ...
   )
 
+  keep_x_pred <- !(names(data) %in% c(Y, Trt))
   e0 <- SuperLearner::predict.SuperLearner(
-    m0, data, onlySL = TRUE, type = "response"
+    m0, subset(data, select = keep_x_pred),
+    onlySL = TRUE, type = "response"
     )
   e1 <- SuperLearner::predict.SuperLearner(
-    m1, data, onlySL = TRUE, type = "response"
+    m1, subset(data, select = keep_x_pred),
+    onlySL = TRUE, type = "response"
   )
 
   # Estimated CATE
@@ -204,8 +212,9 @@ get_vt1 <- function(step1) {
 
 subset_trt <- function(data, value, Trt) {
 
-  A <- data[[Trt]] == value
-  data_trt <- subset(data, subset = A, select = c(-Trt))
+  # A <- data[[Trt]] == value
+  # data_trt <- subset(data, subset = A, select = c(-Trt))
+  data_trt <- data[data[[Trt]] == value, !names(data) %in% c(Trt)]
 
   return(data_trt)
 }
