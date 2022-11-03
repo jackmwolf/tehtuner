@@ -19,6 +19,7 @@ library(ggtext)
 library(magrittr)
 library(kableExtra)
 library(Cairo)
+library(rpart.plot)
 ```
 
 # tehtuner
@@ -86,8 +87,10 @@ vt_cate <- tunevt(
 
 The fitted Step 2 model can be accessed via `$vtmod`. 
 In this case, as we used a regression tree in Step 2, our final model model is of class `rpart`.
-```{r}
+```{r dev='CairoPNG', warning = FALSE}
 vt_cate$vtmod
+
+rpart.plot::rpart.plot(vt_cate$vtmod)
 ```
 
 The fitted model for the CATE includes a covariate (`V1`), so we would conclude that there is treatment effect heterogeneity at the 20% level. 
@@ -144,4 +147,4 @@ ggsave("man/figures/README_mnpp_plot-2.png", plot = p, dpi = 700)
 
 - Foster, J. C., Taylor, J. M., & Ruberg, S. J. (2011). Subgroup identification from randomized clinical trial data. _Statistics in Medicine, 30_(24), 2867–2880. https://doi.org/10.1002/sim.4322
 
-- Wolf, J. M., Koopmeiners, J. S., & Vock, D. M. (2022). A permutation procedure to detect heterogeneous treatment effects in randomized clinical trials while controlling the type-I error rate. _Clinical Trials_. https://doi.org/10.1177/17407745221095855
+- Wolf, J. M., Koopmeiners, J. S., & Vock, D. M. (2022). A permutation procedure to detect heterogeneous treatment effects in randomized clinical trials while controlling the type-I error rate. _Clinical Trials 19_(5). https://doi.org/10.1177/17407745221095855

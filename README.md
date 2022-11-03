@@ -28,9 +28,9 @@ is selected to control the Type-I error rate by permuting the data under
 the null hypothesis of a constant treatment effect and identifying the
 minimal null penalty parameter (MNPP), which is the smallest penalty
 parameter that yields a Step 2 model with no covariate effects. The
-1 − *α* quantile of the distribution of is then used to fit the Step 2
-model on the original data. In dong so, the Type-I error rate is
-controlled to be *α*.
+$1-\alpha$ quantile of the distribution of is then used to fit the Step
+2 model on the original data. In dong so, the Type-I error rate is
+controlled to be $\alpha$.
 
 ## Installation
 
@@ -40,8 +40,10 @@ controlled to be *α*.
 You can download the development version from
 [GitHub](https://github.com/) with:
 
-    # install.packages("devtools")
-    devtools::install_github("jackmwolf/tehtuner")
+``` r
+# install.packages("devtools")
+devtools::install_github("jackmwolf/tehtuner")
+```
 
 ## Example
 
@@ -50,11 +52,13 @@ subjects. Each subject has 10 measured covaraites, 8 continuous and 2
 binary. We are interested in estimating and understanding the CATE
 through Virtual Twins.
 
-    library(tehtuner)
-    data("tehtuner_example")
-    tehtuner_example %>% 
-      head %>% 
-      kbl(booktabs = TRUE, digits = 2, format = "markdown")
+``` r
+library(tehtuner)
+data("tehtuner_example")
+tehtuner_example %>% 
+  head %>% 
+  kbl(booktabs = TRUE, digits = 2, format = "markdown")
+```
 
 | Trt |     Y |    V1 |    V2 |    V3 |   V4 |    V5 |    V6 |    V7 |   V8 |  V9 | V10 |
 |----:|------:|------:|------:|------:|-----:|------:|------:|------:|-----:|----:|----:|
@@ -67,50 +71,61 @@ through Virtual Twins.
 
 We will consider a Virtual Twins model using a random forest to estimate
 the CATEs in Step 1 and then fitting a regression tree on the estimated
-CATEs in Step 2 with the Type-I error rate set at *α* = 0.2.
+CATEs in Step 2 with the Type-I error rate set at $\alpha = 0.2$.
 
-    set.seed(100)
-    vt_cate <- tunevt(
-      data = tehtuner_example, Y = "Y", Trt = "Trt", step1 = "randomforest",
-      step2 = "rtree", alpha0 = 0.2, p_reps = 100, ntree = 50
-    )
+``` r
+set.seed(100)
+vt_cate <- tunevt(
+  data = tehtuner_example, Y = "Y", Trt = "Trt", step1 = "randomforest",
+  step2 = "rtree", alpha0 = 0.2, p_reps = 100, ntree = 50
+)
+```
 
 The fitted Step 2 model can be accessed via `$vtmod`. In this case, as
 we used a regression tree in Step 2, our final model model is of class
 `rpart`.
 
-    vt_cate$vtmod
-    #> n= 200 
-    #> 
-    #> node), split, n, deviance, yval
-    #>       * denotes terminal node
-    #> 
-    #> 1) root 200 4282.543  1.9449220  
-    #>   2) V1< -1.081597 125 1418.895 -0.1780733 *
-    #>   3) V1>=-1.081597 75 1361.278  5.4832470 *
+``` r
+vt_cate$vtmod
+#> n= 200 
+#> 
+#> node), split, n, deviance, yval
+#>       * denotes terminal node
+#> 
+#> 1) root 200 4282.543  1.9449220  
+#>   2) V1< -1.081597 125 1418.895 -0.1780733 *
+#>   3) V1>=-1.081597 75 1361.278  5.4832470 *
+
+rpart.plot::rpart.plot(vt_cate$vtmod)
+```
+
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
 
 The fitted model for the CATE includes a covariate (`V1`), so we would
 conclude that there is treatment effect heterogeneity at the 20% level.
 (We note that the true data generating mechanism
-(*Y*<sub>*i*</sub> = *h*(*X*<sub>*i*</sub>) + *T*<sub>*i*</sub>*g*(*X*<sub>*i*</sub>))
-included an interaction between the treatment and whether
-*V*<sub>1</sub> was above its true mean \[sample mean -1.34\] with
-*g*(*X*<sub>*i*</sub>) = *c* + 4*I*(*V*<sub>1*i*</sub> &gt; *μ*<sub>1</sub>) + 4*V*<sub>9*i*</sub>.
-So, the procedure did not make a Type-I error *and* correctly detected a
-covariate driving this heterogeneity.)
+($Y_i = h(X_i) + T_i g(X_i)$) included an interaction between the
+treatment and whether $V_1$ was above its true mean \[sample mean
+-1.34\] with $g(X_i) = c + 4I(V_{1i}>\mu_1)+4V_{9i}$. So, the procedure
+did not make a Type-I error *and* correctly detected a covariate driving
+this heterogeneity.)
 
 We can also look at the null distribution of the MNPP through
-`vt_cate$theta_null`. The 80th quantile of *θ̂* under the null hypothesis
-is
+`vt_cate$theta_null`. The 80th quantile of $\hat\theta$ under the null
+hypothesis is
 
-    quantile(vt_cate$theta_null, 0.8)
-    #>       80% 
-    #> 0.2317442
+``` r
+quantile(vt_cate$theta_null, 0.8)
+#>       80% 
+#> 0.2317442
+```
 
 while the MNPP of our observed data is
 
-    vt_cate$mnpp
-    #> [1] 0.3508124
+``` r
+vt_cate$mnpp
+#> [1] 0.3508124
+```
 
 The procedure fit the Step 2 model using the 80th quantile of the null
 distribution which resulted in a model that included covariates since
@@ -123,11 +138,9 @@ data](man/figures/README_mnpp_plot-2.png)
 
 -   Foster, J. C., Taylor, J. M., & Ruberg, S. J. (2011). Subgroup
     identification from randomized clinical trial data. *Statistics in
-    Medicine, 30*(24), 2867–2880.
-    <a href="https://doi.org/10.1002/sim.4322" class="uri">https://doi.org/10.1002/sim.4322</a>
+    Medicine, 30*(24), 2867–2880. <https://doi.org/10.1002/sim.4322>
 
 -   Wolf, J. M., Koopmeiners, J. S., & Vock, D. M. (2022). A permutation
     procedure to detect heterogeneous treatment effects in randomized
     clinical trials while controlling the type-I error rate. *Clinical
-    Trials*.
-    <a href="https://doi.org/10.1177/17407745221095855" class="uri">https://doi.org/10.1177/17407745221095855</a>
+    Trials 19*(5). <https://doi.org/10.1177/17407745221095855>
