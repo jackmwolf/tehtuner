@@ -1,11 +1,11 @@
 Package: tehtuner
 Title: Fit and Tune Models to Detect Treatment Effect Heterogeneity
-Version: 0.0.1.9000
+Version: 0.1.0
 Authors@R: 
     person(given = "Jack",
            family = "Wolf",
            role = c("aut", "cre"),
-           email = "wolfx681@example.com",
+           email = "WolfX681@umn.edu",
            comment = c(ORCID = "0000-0002-8919-8740"))
 Description: Implements methods to fit Virtual Twins models (Foster et al. 
   (2011) <doi:10.1002/sim.4322>) for identifying subgroups with differential
