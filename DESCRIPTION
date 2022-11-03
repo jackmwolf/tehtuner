@@ -1,6 +1,6 @@
 Package: tehtuner
 Title: Fit and Tune Models to Detect Treatment Effect Heterogeneity
-Version: 0.1.0
+Version: 0.0.0.9001
 Authors@R: 
     person(given = "Jack",
            family = "Wolf",
@@ -30,7 +30,9 @@ Imports:
     earth
 RdMacros: Rdpack
 Suggests: 
-    spelling
+    spelling,
+    testthat (>= 3.0.0)
 Language: en-US
 URL: https://github.com/jackmwolf/tehtuner
 BugReports: https://github.com/jackmwolf/tehtuner/issues
+Config/testthat/edition: 3
