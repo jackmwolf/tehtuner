@@ -5,7 +5,7 @@ Authors@R:
     person(given = "Jack",
            family = "Wolf",
            role = c("aut", "cre"),
-           email = "WolfX681@umn.edu",
+           email = "jackwolf910@gmail.com",
            comment = c(ORCID = "0000-0002-8919-8740"))
 Description: Implements methods to fit Virtual Twins models (Foster et al. 
   (2011) <doi:10.1002/sim.4322>) for identifying subgroups with differential
