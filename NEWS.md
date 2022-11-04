@@ -1,3 +1,7 @@
+# tehtuner 0.1.1
+
+This patch reconciles an invalid URI in the `tunevt` documentation's references.
+
 # tehtuner 0.1.0
 
 This is a new package that implements the Virtual Twins algorithm for subgroup
