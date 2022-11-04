@@ -1,3 +1,8 @@
+## Resubmission
+This is a resubmission. In this patch I have:
+
+* Removed an invalid URI in man/tunevt.Rd
+
 ## Test environments
 * local R installation, R 4.2.1
 * win-builder (devel)
