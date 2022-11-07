@@ -5,6 +5,10 @@
 
 <!-- badges: start -->
 
+[![CRAN
+status](https://www.r-pkg.org/badges/version/tehtuner)](https://CRAN.R-project.org/package=tehtuner)
+![CRAN
+Downloads](https://cranlogs.r-pkg.org/badges/grand-total/tehtuner)
 [![R-CMD-check](https://github.com/jackmwolf/tehtuner/workflows/R-CMD-check/badge.svg)](https://github.com/jackmwolf/tehtuner/actions)
 <!-- badges: end -->
 
@@ -34,8 +38,12 @@ controlled to be $\alpha$.
 
 ## Installation
 
-`tehtuner` is not currently available on
-[CRAN](https://CRAN.R-project.org).
+`tehtuner` is available on [CRAN](https://CRAN.R-project.org); you can
+download the release version with:
+
+``` r
+install.packages("tehtuner")
+```
 
 You can download the development version from
 [GitHub](https://github.com/) with:
@@ -103,12 +111,12 @@ rpart.plot::rpart.plot(vt_cate$vtmod)
 
 The fitted model for the CATE includes a covariate (`V1`), so we would
 conclude that there is treatment effect heterogeneity at the 20% level.
-(We note that the true data generating mechanism
+We note that the true data generating mechanism
 ($Y_i = h(X_i) + T_i g(X_i)$) included an interaction between the
-treatment and whether $V_1$ was above its true mean \[sample mean
--1.34\] with $g(X_i) = c + 4I(V_{1i}>\mu_1)+4V_{9i}$. So, the procedure
-did not make a Type-I error *and* correctly detected a covariate driving
-this heterogeneity.)
+treatment and whether $V_1$ was above its true mean (sample mean -1.34)
+with $g(X_i) = c + 4I(V_{1i}>\mu_1)+4V_{9i}$. So, the procedure did not
+make a Type-I error *and* correctly detected a covariate driving this
+heterogeneity.
 
 We can also look at the null distribution of the MNPP through
 `vt_cate$theta_null`. The 80th quantile of $\hat\theta$ under the null
