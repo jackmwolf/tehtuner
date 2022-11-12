@@ -8,26 +8,35 @@
 #' @param zbar the estimated marginal treatment effect
 #'
 #' @importFrom stats quantile
+#' @importFrom foreach foreach `%dopar%`
 #'
 #' @return the estimated penalty parameter
 #'
-tune_theta <- function(data, Trt, Y, zbar, step1, step2, alpha0, p_reps, ...) {
-
-
+tune_theta <- function(data, Trt, Y, zbar, step1, step2, alpha0, p_reps,
+                       parallel, ...) {
   # To pass ... to replicate()
   arg_list <- list(...)
   get_theta_null0 <- function(...) {
-    get_theta_null(data = data, Trt = Trt, Y = Y, zbar = zbar,
-                   step1 = step1, step2 = step2, ...)
+    get_theta_null(
+      data = data, Trt = Trt, Y = Y, zbar = zbar,
+      step1 = step1, step2 = step2, ...
+    )
   }
 
-
   # Null distribution of MNPP
-  thetas <- replicate(
-    p_reps,
-    expr = { do.call(get_theta_null0, args = arg_list) },
-    simplify = TRUE)
-
+  if (parallel) {
+    thetas <- foreach(i = seq(p_reps), .combine = c) %dopar% {
+      do.call(get_theta_null0, args = arg_list)
+    }
+  } else {
+    thetas <- replicate(
+      p_reps,
+      expr = {
+        do.call(get_theta_null0, args = arg_list)
+      },
+      simplify = TRUE
+    )
+  }
 
   # Take the 1 - alpha0 quantile of the null distribution
   theta_alpha <- quantile(thetas, probs = 1 - alpha0, na.rm = TRUE, type = 2)

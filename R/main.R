@@ -34,6 +34,11 @@
 #' @param alpha0 the nominal Type I error rate.
 #' @param p_reps the number of permutations to run.
 #' @param keepz logical. Should the estimated CATE from Step 1 be returned?
+#' @param parallel Should the loop over replications be parallelized? If
+#'   \code{FALSE}, then no, if \code{TRUE}, then yes.
+#'   Note that running in parallel requires a _parallel backend_ that must be
+#'   registered before performing the computation.
+#'   See the \code{\link[foreach]{foreach}} documentation for more details.
 #' @param ... additional arguments to the Step 1 model call.
 #'
 #' @return an object of class \code{"tunevt"}.
@@ -69,7 +74,7 @@
 #' @export
 tunevt <- function(
   data, Y = "Y", Trt = "Trt", step1 = "randomforest", step2 = "rtree",
-  alpha0, p_reps, keepz = FALSE, ...)
+  alpha0, p_reps, keepz = FALSE, parallel = FALSE, ...)
   {
 
   cl <- match.call()
@@ -91,6 +96,7 @@ tunevt <- function(
   theta <- tune_theta(data = data, Trt = Trt, Y = Y, zbar = zbar,
                       step1 = step1, step2 = step2,
                       alpha0 = alpha0, p_reps = p_reps,
+                      parallel = parallel,
                       ...)
 
   # Fit Virtual Twins

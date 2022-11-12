@@ -4,7 +4,7 @@
 \alias{tune_theta}
 \title{Estimate the penalty parameter for Step 2 of Virtual Twins}
 \usage{
-tune_theta(data, Trt, Y, zbar, step1, step2, alpha0, p_reps, ...)
+tune_theta(data, Trt, Y, zbar, step1, step2, alpha0, p_reps, parallel, ...)
 }
 \arguments{
 \item{data}{a data frame containing a response, binary treatment indicators,
@@ -28,6 +28,12 @@ either "\code{lasso}", "\code{mars}", "\code{randomforest}", or
 \item{alpha0}{the nominal Type I error rate.}
 
 \item{p_reps}{the number of permutations to run.}
+
+\item{parallel}{Should the loop over replications be parallelized? If
+\code{FALSE}, then no, if \code{TRUE}, then yes.
+Note that running in parallel requires a \emph{parallel backend} that must be
+registered before performing the computation.
+See the \code{\link[foreach]{foreach}} documentation for more details.}
 
 \item{...}{additional arguments to the Step 1 model call.}
 }
