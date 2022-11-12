@@ -13,6 +13,7 @@ tunevt(
   alpha0,
   p_reps,
   keepz = FALSE,
+  parallel = FALSE,
   ...
 )
 }
@@ -38,6 +39,12 @@ either "\code{lasso}", "\code{mars}", "\code{randomforest}", or
 \item{p_reps}{the number of permutations to run.}
 
 \item{keepz}{logical. Should the estimated CATE from Step 1 be returned?}
+
+\item{parallel}{Should the loop over replications be parallelized? If
+\code{FALSE}, then no, if \code{TRUE}, then yes.
+Note that running in parallel requires a \emph{parallel backend} that must be
+registered before performing the computation.
+See the \code{\link[foreach]{foreach}} documentation for more details.}
 
 \item{...}{additional arguments to the Step 1 model call.}
 }

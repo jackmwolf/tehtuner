@@ -63,19 +63,7 @@ through Virtual Twins.
 ``` r
 library(tehtuner)
 data("tehtuner_example")
-tehtuner_example %>% 
-  head %>% 
-  kbl(booktabs = TRUE, digits = 2, format = "markdown")
 ```
-
-| Trt |     Y |    V1 |    V2 |    V3 |   V4 |    V5 |    V6 |    V7 |   V8 |  V9 | V10 |
-|----:|------:|------:|------:|------:|-----:|------:|------:|------:|-----:|----:|----:|
-|   0 |  0.56 | -1.41 | -3.87 |  0.22 | 1.77 | -1.43 | -0.14 | -1.29 | 2.15 |   1 |   1 |
-|   0 | -2.64 | -0.68 | -3.50 | -1.01 | 1.30 | -3.62 | -2.52 | -2.71 | 1.77 |   1 |   1 |
-|   0 |  3.04 | -4.34 | -5.76 | -2.25 | 1.12 | -3.68 | -1.21 | -2.07 | 1.65 |   1 |   1 |
-|   0 |  0.22 |  0.59 | -3.87 | -0.68 | 0.81 | -2.89 | -1.47 | -1.83 | 1.70 |   1 |   1 |
-|   0 | -0.97 | -1.94 | -2.59 | -0.29 | 0.23 | -3.19 | -1.93 | -1.69 | 2.18 |   0 |   0 |
-|   0 | -3.61 | -0.32 | -2.58 |  0.36 | 1.94 | -2.35 | -3.01 | -1.69 | 2.85 |   0 |   0 |
 
 We will consider a Virtual Twins model using a random forest to estimate
 the CATEs in Step 1 and then fitting a regression tree on the estimated
@@ -141,6 +129,27 @@ the MNPP was above the 80th quantile.
 
 ![Histogram showing the null distribution of the MNPP for the example
 data](man/figures/README_mnpp_plot-2.png)
+
+### Running in Parallel
+
+Development version `0.1.1.9001` added the `parallel` option to
+`tunevt()` which allows the user to perform the permutation procedure in
+parallel to reduce computation times. Before doing so, you must register
+a parallel backend; see `?foreach::foreach` for more information.
+
+For example, to carry out 100 permutations across 2 processors:
+
+``` r
+cl <- parallel::makeCluster(2)
+doParallel::registerDoParallel(cl)
+
+vt_cate_parallel <- tunevt(
+  data = tehtuner_example, Y = "Y", Trt = "Trt", step1 = "randomforest",
+  step2 = "rtree", alpha0 = 0.2, p_reps = 100, ntree = 50, parallel = TRUE
+)
+
+parallel::stopCluster(cl)
+```
 
 ## References
 

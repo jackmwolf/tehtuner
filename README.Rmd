@@ -76,9 +76,6 @@ We are interested in estimating and understanding the CATE through Virtual Twins
 ```{r}
 library(tehtuner)
 data("tehtuner_example")
-tehtuner_example %>% 
-  head %>% 
-  kbl(booktabs = TRUE, digits = 2, format = "markdown")
 ```
 
 We will consider a Virtual Twins model using a random forest to estimate the CATEs in Step 1 and then fitting a regression tree on the estimated CATEs in Step 2 with the Type-I error rate set at $\alpha = 0.2$.
@@ -148,6 +145,26 @@ ggsave("man/figures/README_mnpp_plot-2.png", plot = p, dpi = 700)
 ```
 
 ![Histogram showing the null distribution of the MNPP for the example data](man/figures/README_mnpp_plot-2.png)
+
+### Running in Parallel
+
+Development version `0.1.1.9001` added the `parallel` option to `tunevt()` which allows the user to perform the permutation procedure in parallel to reduce computation times. 
+Before doing so, you must register a parallel backend; see `?foreach::foreach` for more information.
+
+For example, to carry out 100 permutations across 2 processors:
+
+```{r eval = FALSE}
+cl <- parallel::makeCluster(2)
+doParallel::registerDoParallel(cl)
+
+vt_cate_parallel <- tunevt(
+  data = tehtuner_example, Y = "Y", Trt = "Trt", step1 = "randomforest",
+  step2 = "rtree", alpha0 = 0.2, p_reps = 100, ntree = 50, parallel = TRUE
+)
+
+parallel::stopCluster(cl)
+```
+
 
 ## References
 

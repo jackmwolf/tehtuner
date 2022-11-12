@@ -29,7 +29,8 @@ Imports:
     stringr,
     SuperLearner,
     randomForestSRC,
-    earth
+    earth,
+    foreach
 RdMacros: Rdpack
 Suggests: 
     spelling,
