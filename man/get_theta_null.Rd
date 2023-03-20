@@ -4,7 +4,7 @@
 \alias{get_theta_null}
 \title{Permute a dataset under the null hypothesis and get the MNPP}
 \usage{
-get_theta_null(data, Trt, Y, zbar, step1, step2, ...)
+get_theta_null(data, Trt, Y, zbar, step1, step2, threshold, ...)
 }
 \arguments{
 \item{data}{a data frame containing a response, binary treatment indicators,
@@ -23,7 +23,11 @@ either "\code{lasso}", "\code{mars}", "\code{randomforest}", or
 "\code{superlearner}".}
 
 \item{step2}{a character string specifying the Step 2 model. Supports
-"\code{lasso}", "\code{rtree}", or "\code{ctree}".}
+"\code{lasso}", "\code{rtree}",  "\code{classtree}", or "\code{ctree}".}
+
+\item{threshold}{for "\code{step2 = 'classtree'}" only. The value against
+which to test if the estimated individual treatment effect from Step 1 is
+higher (TRUE) or lower (FALSE).}
 
 \item{...}{additional arguments to the Step 1 model call.}
 }

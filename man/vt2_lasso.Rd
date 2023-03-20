@@ -34,6 +34,7 @@ Estimate the CATE using the Lasso for Step 2
 }
 \seealso{
 Other VT Step 2 functions: 
+\code{\link{vt2_classtree}()},
 \code{\link{vt2_ctree}()},
 \code{\link{vt2_rtree}()}
 }

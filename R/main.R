@@ -30,9 +30,12 @@
 #'   either "\code{lasso}", "\code{mars}", "\code{randomforest}", or
 #'   "\code{superlearner}".
 #' @param step2 a character string specifying the Step 2 model. Supports
-#'   "\code{lasso}", "\code{rtree}", or "\code{ctree}".
+#'   "\code{lasso}", "\code{rtree}",  "\code{classtree}", or "\code{ctree}".
 #' @param alpha0 the nominal Type I error rate.
 #' @param p_reps the number of permutations to run.
+#' @param threshold for "\code{step2 = 'classtree'}" only. The value against
+#'   which to test if the estimated individual treatment effect from Step 1 is
+#'   higher (TRUE) or lower (FALSE).
 #' @param keepz logical. Should the estimated CATE from Step 1 be returned?
 #' @param parallel Should the loop over replications be parallelized? If
 #'   \code{FALSE}, then no, if \code{TRUE}, then yes.
@@ -73,9 +76,9 @@
 #'
 #' @export
 tunevt <- function(
-  data, Y = "Y", Trt = "Trt", step1 = "randomforest", step2 = "rtree",
-  alpha0, p_reps, keepz = FALSE, parallel = FALSE, ...)
-  {
+    data, Y = "Y", Trt = "Trt", step1 = "randomforest", step2 = "rtree",
+    alpha0, p_reps, threshold = NA, keepz = FALSE, parallel = FALSE, ...)
+{
 
   cl <- match.call()
 
@@ -96,7 +99,7 @@ tunevt <- function(
   theta <- tune_theta(data = data, Trt = Trt, Y = Y, zbar = zbar,
                       step1 = step1, step2 = step2,
                       alpha0 = alpha0, p_reps = p_reps,
-                      parallel = parallel,
+                      parallel = parallel, threshold = threshold,
                       ...)
 
   # Fit Virtual Twins
@@ -106,10 +109,14 @@ tunevt <- function(
 
   # Step 2
   vt2 <- get_vt2(step2)
-  mod <- vt2(z, data, Trt = Trt, Y = Y, theta = theta$theta)
+  if (step2 == "classtree") {
+    mod <- vt2(z, data, Trt = Trt, Y = Y, theta = theta$theta, threshold = threshold)
+  } else {
+    mod <- vt2(z, data, Trt = Trt, Y = Y, theta = theta$theta)
+  }
 
   # MNPP for the original data
-  mnpp <- get_mnpp(z = z, data = data, step2 = step2, Trt = Trt, Y = Y)
+  mnpp <- get_mnpp(z = z, data = data, step2 = step2, Trt = Trt, Y = Y, threshold = threshold)
 
   re <- list(
     vtmod = mod,
