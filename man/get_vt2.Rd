@@ -8,7 +8,7 @@ get_vt2(step2)
 }
 \arguments{
 \item{step2}{a character string specifying the Step 2 model. Supports
-"\code{lasso}", "\code{rtree}", or "\code{ctree}".}
+"\code{lasso}", "\code{rtree}",  "\code{classtree}", or "\code{ctree}".}
 }
 \value{
 a function that fits a model for the CATE through Step 2 of Virtual

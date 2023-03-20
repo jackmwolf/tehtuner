@@ -12,6 +12,7 @@ tunevt(
   step2 = "rtree",
   alpha0,
   p_reps,
+  threshold = NA,
   keepz = FALSE,
   parallel = FALSE,
   ...
@@ -32,11 +33,15 @@ either "\code{lasso}", "\code{mars}", "\code{randomforest}", or
 "\code{superlearner}".}
 
 \item{step2}{a character string specifying the Step 2 model. Supports
-"\code{lasso}", "\code{rtree}", or "\code{ctree}".}
+"\code{lasso}", "\code{rtree}",  "\code{classtree}", or "\code{ctree}".}
 
 \item{alpha0}{the nominal Type I error rate.}
 
 \item{p_reps}{the number of permutations to run.}
+
+\item{threshold}{for "\code{step2 = 'classtree'}" only. The value against
+which to test if the estimated individual treatment effect from Step 1 is
+higher (TRUE) or lower (FALSE).}
 
 \item{keepz}{logical. Should the estimated CATE from Step 1 be returned?}
 

@@ -4,7 +4,19 @@
 \alias{tune_theta}
 \title{Estimate the penalty parameter for Step 2 of Virtual Twins}
 \usage{
-tune_theta(data, Trt, Y, zbar, step1, step2, alpha0, p_reps, parallel, ...)
+tune_theta(
+  data,
+  Trt,
+  Y,
+  zbar,
+  step1,
+  step2,
+  threshold,
+  alpha0,
+  p_reps,
+  parallel,
+  ...
+)
 }
 \arguments{
 \item{data}{a data frame containing a response, binary treatment indicators,
@@ -23,7 +35,11 @@ either "\code{lasso}", "\code{mars}", "\code{randomforest}", or
 "\code{superlearner}".}
 
 \item{step2}{a character string specifying the Step 2 model. Supports
-"\code{lasso}", "\code{rtree}", or "\code{ctree}".}
+"\code{lasso}", "\code{rtree}",  "\code{classtree}", or "\code{ctree}".}
+
+\item{threshold}{for "\code{step2 = 'classtree'}" only. The value against
+which to test if the estimated individual treatment effect from Step 1 is
+higher (TRUE) or lower (FALSE).}
 
 \item{alpha0}{the nominal Type I error rate.}
 
