@@ -1,6 +1,6 @@
 Package: tehtuner
 Title: Fit and Tune Models to Detect Treatment Effect Heterogeneity
-Version: 0.1.2
+Version: 0.1.2.9000
 Authors@R: 
     person(given = "Jack",
            family = "Wolf",
