@@ -90,7 +90,7 @@ tunevt <- function(
   d1 <- subset_trt(data, value = 1, Trt = Trt)
 
   # Estimate marginal average treatment effect
-  zbar <- mean(d1[, 1]) - mean(d0[, 1])
+  zbar <- mean(d1[, Y]) - mean(d0[, Y])
 
   # Permutation to get the null distribution of the MNPP
   theta <- tune_theta(data = data, Trt = Trt, Y = Y, zbar = zbar,
