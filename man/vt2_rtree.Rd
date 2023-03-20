@@ -29,7 +29,6 @@ Estimate the CATE using a regression tree for Step 2
 }
 \seealso{
 Other VT Step 2 functions: 
-\code{\link{vt2_classtree}()},
 \code{\link{vt2_ctree}()},
 \code{\link{vt2_lasso}()}
 }

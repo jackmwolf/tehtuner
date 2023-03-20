@@ -12,14 +12,14 @@
 #'
 #' @return the estimated penalty parameter
 #'
-tune_theta <- function(data, Trt, Y, zbar, step1, step2, threshold, alpha0, p_reps,
+tune_theta <- function(data, Trt, Y, zbar, step1, step2, alpha0, p_reps,
                        parallel, ...) {
   # To pass ... to replicate()
   arg_list <- list(...)
   get_theta_null0 <- function(...) {
     get_theta_null(
       data = data, Trt = Trt, Y = Y, zbar = zbar,
-      step1 = step1, step2 = step2, threshold = threshold, ...
+      step1 = step1, step2 = step2, ...
     )
   }
 
@@ -74,7 +74,7 @@ permute <- function(data, Trt, Y, zbar) {
 #' @inheritParams tunevt
 #'
 #' @return the MNPP for the permuted data set
-get_theta_null <- function(data, Trt, Y, zbar, step1, step2, threshold, ...) {
+get_theta_null <- function(data, Trt, Y, zbar, step1, step2, ...) {
 
   data_p <- permute(data, Trt = Trt, Y = Y, zbar)
 
@@ -83,7 +83,7 @@ get_theta_null <- function(data, Trt, Y, zbar, step1, step2, threshold, ...) {
   z <- vt1(data_p, Trt = Trt, Y = Y, ...)
 
 
-  theta <- get_mnpp(z, data_p, step2, Trt = Trt, Y = Y, threshold)
+  theta <- get_mnpp(z, data_p, step2, Trt = Trt, Y = Y)
 
   return(theta)
 }
@@ -97,30 +97,27 @@ get_theta_null <- function(data, Trt, Y, zbar, step1, step2, threshold, ...) {
 #' @param z a numeric vector of estimated CATEs from Step 1
 #' @inheritParams tunevt
 #'
-get_mnpp <- function(z, data, step2, Trt, Y, threshold) {
+get_mnpp <- function(z, data, step2, Trt, Y) {
   if (step2 == "lasso") {
 
-    re <- get_mnpp.lasso(z, data, Trt = Trt, Y = Y)
+    f <- get_mnpp.lasso
 
   } else if (step2 == "rtree") {
 
-    re <- get_mnpp.rtree(z, data, Trt = Trt, Y = Y)
+    f <- get_mnpp.rtree
 
   } else if (step2 == "ctree") {
 
-    re <- get_mnpp.ctree(z, data, Trt = Trt, Y = Y)
-
-  } else if (step2 == "classtree") {
-
-    re <- get_mnpp.classtree(z, data, Trt = Trt, Y = Y, threshold = threshold)
+    f <- get_mnpp.ctree
 
   } else {
 
-    stop("Invalid input to step2. Accepts 'lasso', 'rtree', 'classtree', and 'ctree'.")
+    stop("Invalid input to step2. Accepts 'lasso', 'rtree' and 'ctree'.")
 
   }
 
-  return(re)
+  theta <- f(z, data, Trt = Trt, Y = Y)
+  return(theta)
 }
 
 #' Get the MNPP for a Model fit via Lasso
@@ -132,10 +129,8 @@ get_mnpp <- function(z, data, step2, Trt, Y, threshold) {
 #' @importFrom glmnet glmnet
 #'
 get_mnpp.lasso <- function(z, data, Trt, Y) {
-
-  keep_x_fit <- !(names(data) %in% c(Y, Trt))
   mod <- glmnet::glmnet(
-    x = data.matrix(subset(data, select = keep_x_fit)),
+    x = data.matrix(subset(data, select = !names(data) %in% c(Y, Trt))),
     y = data.matrix(z)
     )
 
@@ -156,44 +151,14 @@ get_mnpp.lasso <- function(z, data, Trt, Y) {
 #'
 get_mnpp.rtree <- function(z, data, Trt, Y) {
 
-  keep_x_fit <- !(names(data) %in% c(Y, Trt))
   mod <- rpart::rpart(
-    z ~ ., data = subset(data, select = keep_x_fit),
+    z ~ ., data = subset(data, select = !names(data) %in% c(Y, Trt)),
     method = "anova",
     cp = 0
   )
 
   theta <- mod$frame[1, "complexity"]
 
-  return(theta)
-}
-
-#' Get the MNPP for a Classification Tree
-#'
-#' Finds the lowest complexity parameter for a null regression tree fit
-#'
-#' @inheritParams get_mnpp
-#'
-#' @return the MNPP
-#'
-#' @importFrom rpart rpart
-#'
-get_mnpp.classtree <- function(z, data, Trt, Y, threshold) {
-  z_class <- ifelse(z > threshold, 1, 0)
-
-  # Return infinity early if all values are above or below threshold
-  if (length(unique(z)) == 1) {
-    return(Inf)
-  }
-
-  keep_x_fit <- !(names(data) %in% c(Y, Trt))
-  mod <- rpart::rpart(
-    z_class ~ ., data = subset(data, select = keep_x_fit),
-    method = "class",
-    cp = 0
-  )
-
-  theta <- mod$frame[1, "complexity"]
   return(theta)
 }
 

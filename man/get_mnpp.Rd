@@ -4,7 +4,7 @@
 \alias{get_mnpp}
 \title{Get the MNPP for the Step 2 model}
 \usage{
-get_mnpp(z, data, step2, Trt, Y, threshold)
+get_mnpp(z, data, step2, Trt, Y)
 }
 \arguments{
 \item{z}{a numeric vector of estimated CATEs from Step 1}
@@ -13,17 +13,13 @@ get_mnpp(z, data, step2, Trt, Y, threshold)
 and covariates.}
 
 \item{step2}{a character string specifying the Step 2 model. Supports
-"\code{lasso}", "\code{rtree}",  "\code{classtree}", or "\code{ctree}".}
+"\code{lasso}", "\code{rtree}", or "\code{ctree}".}
 
 \item{Trt}{a string specifying the name of the column of \code{data}
 contains the treatment indicators.}
 
 \item{Y}{a string specifying the name of the column of \code{data}
 contains the response.}
-
-\item{threshold}{for "\code{step2 = 'classtree'}" only. The value against
-which to test if the estimated individual treatment effect from Step 1 is
-higher (TRUE) or lower (FALSE).}
 }
 \description{
 Find the lowest penalty parameter so that the Step 2 model fit for the

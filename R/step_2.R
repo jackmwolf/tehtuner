@@ -62,33 +62,6 @@ vt2_rtree <- function(z, data, Trt, Y, theta) {
 
 }
 
-#' Estimate the CATE using a classification tree for Step 2
-#'
-#' @inheritParams tunevt
-#' @inheritParams get_mnpp
-#' @param theta tree complexity parameter (\code{cp})
-#'
-#' @importFrom rpart rpart
-#' @importFrom stats predict coef
-#'
-#' @family VT Step 2 functions
-#'
-#' @return an object of class \code{rpart}. See
-#'   \code{\link[rpart]{rpart.object}}.
-#'
-vt2_classtree <- function(z, data, Trt, Y, theta, threshold) {
-
-  z_class <- ifelse(z > threshold, 1, 0)
-
-  keep_x_fit <- !(names(data) %in% c(Y, Trt))
-  mod <- rpart::rpart(
-    z_class ~ ., data = subset(data, select = keep_x_fit),
-    method = "class",
-    cp = theta
-  )
-  return(mod)
-}
-
 
 #' Estimate the CATE using a conditional inference tree for Step 2
 #'
@@ -135,10 +108,8 @@ get_vt2 <- function(step2) {
     f <- vt2_rtree
   } else if (step2 == "ctree") {
     f <- vt2_ctree
-  } else if (step2 == "classtree") {
-    f <- vt2_classtree
   } else {
-    stop("Invalid argument to 'step2'. Accepts 'lasso', 'rtree', 'classtree', and 'ctree'.")
+    stop("Invalid argument to 'step2'. Accepts 'lasso', 'rtree', and 'ctree'.")
   }
   return(f)
 }

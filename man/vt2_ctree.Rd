@@ -30,7 +30,6 @@ Estimate the CATE using a conditional inference tree for Step 2
 }
 \seealso{
 Other VT Step 2 functions: 
-\code{\link{vt2_classtree}()},
 \code{\link{vt2_lasso}()},
 \code{\link{vt2_rtree}()}
 }
