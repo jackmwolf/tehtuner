@@ -1,5 +1,3 @@
-# tehtuner (development version)
-
 # tehtuner
 
 # tehtuner 0.3.0
