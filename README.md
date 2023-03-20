@@ -153,11 +153,16 @@ parallel::stopCluster(cl)
 
 ## References
 
--   Foster, J. C., Taylor, J. M., & Ruberg, S. J. (2011). Subgroup
-    identification from randomized clinical trial data. *Statistics in
-    Medicine, 30*(24), 2867–2880. <https://doi.org/10.1002/sim.4322>
+- Foster, J. C., Taylor, J. M., & Ruberg, S. J. (2011). Subgroup
+  identification from randomized clinical trial data. *Statistics in
+  Medicine, 30*(24), 2867–2880. <https://doi.org/10.1002/sim.4322>
 
--   Wolf, J. M., Koopmeiners, J. S., & Vock, D. M. (2022). A permutation
-    procedure to detect heterogeneous treatment effects in randomized
-    clinical trials while controlling the type-I error rate. *Clinical
-    Trials 19*(5). <https://doi.org/10.1177/17407745221095855>
+- Wolf, J. M., Koopmeiners, J. S., & Vock, D. M. (2022). A permutation
+  procedure to detect heterogeneous treatment effects in randomized
+  clinical trials while controlling the type-I error rate. *Clinical
+  Trials 19*(5). <https://doi.org/10.1177/17407745221095855>
+
+- Deng C., Wolf J. M., Vock D. M., Carroll D. M., Hatsukami D. K., Leng
+  N., & Koopmeiners J. S. (2023). “Practical guidance on modeling
+  choices for the virtual twins method.” *Journal of Biopharmaceutical
+  Statistics*. <https://doi.org/10.1080/10543406.2023.2170404>.

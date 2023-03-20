@@ -9,8 +9,10 @@
 #' Virtual Twins is a two-step approach to detecting differential treatment
 #' effects. Subjects' conditional average treatment effects (CATEs) are first
 #' estimated in Step 1 using a flexible model. Then, a simple and interpretable
-#' model is fit in Step 2 to model these estimated CATEs as a function of the
-#' covariates.
+#' model is fit in Step 2 to model either (1) the expected value of these
+#' estimated CATEs if \code{step2} is equal to "\code{lasso}", "\code{rtree}",
+#' or "\code{ctree}" or (2) the probability that the CATE is greater than a
+#' specified \code{threshold} if \code{step2} is equal to "\code{classtree}".
 #'
 #' The Step 2 model is dependent on some tuning parameter. This parameter is
 #' selected to control the Type I error rate by permuting the data under the
@@ -64,6 +66,8 @@
 #'   \insertRef{foster_subgroup_2011}{tehtuner}
 #'
 #'   \insertRef{wolf_permutation_2022}{tehtuner}
+#'
+#'   \insertRef{deng_practical_2023}{tehtuner}
 #'
 #' }
 #'
