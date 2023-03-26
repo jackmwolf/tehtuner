@@ -5,7 +5,7 @@
 \alias{tehtuner_example}
 \title{Simulated example data}
 \format{
-A data frame with 200 rows and 12 columns:
+A data frame with 1000 rows and 12 columns:
 \describe{
 \item{Trt}{Binary treatment indicator}
 \item{Y}{Continuous response}
@@ -17,7 +17,7 @@ A data frame with 200 rows and 12 columns:
 tehtuner_example
 }
 \description{
-Simulated data from a clinical trial with heterogenous treatment effects
+Simulated data from a clinical trial with heterogeneous treatment effects
 where the CATE was a function of V1 and V9.
 }
 \keyword{datasets}

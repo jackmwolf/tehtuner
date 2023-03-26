@@ -1,9 +1,8 @@
 library(MASS)
+library(dplyr)
 
 # Main data generating function ---
-dg0 <- function(p = 20, h, g) {
-  N <- 200 # Fixed sample size
-  n <- N# 2*N #N is 1000, 200 or 80,
+dg0 <- function(p = 20, h, g, n = 200) {
 
   if (p == 10) {
     pc <- 8 # Continuous covariates
@@ -115,6 +114,20 @@ g2 <- function(X, p, m) {
 }
 
 # Simulate data ---
-set.seed(1000)
-tehtuner_example <- dg0(p = 10, h = h2, g = g2)
+# set.seed(1000)
+# tehtuner_example <- dg0(p = 10, h = h2, g = g2)
+# save(tehtuner_example, file = "data/tehtuner_example.rda")
+#
+#
+# g3 <- function(X, p, m) {
+#   d <- case_when(
+#     (X[, 1] < m[1]) & (X[, 9] == 1) ~ -2,
+#     (X[, 1] >= m[1]) & (X[, 9] == 1) ~ -1,
+#     X[, 9] == 0 ~ 2
+#   )
+# }
+
+set.seed(8675309)
+tehtuner_example <- dg0(p = 10, h = h2, g = g3, n = 1000)
 save(tehtuner_example, file = "data/tehtuner_example.rda")
+
