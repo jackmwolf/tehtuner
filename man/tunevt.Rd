@@ -89,8 +89,8 @@ of the distribution of is then used to fit the Step 2 model on the original
 data.
 
 Note that if \code{binary_Y} set to \code{TRUE} additional arguments might need to be
-passed through \code{...}. If \code{step1 == "lasso"}, provide \code{family = "binomial"}.
-If \verb{step1 == "superlearner}, provide \code{family = binomial()}.
+passed through \code{...}. If \code{step1} is either \code{"lasso"} or \code{"superlearner"},
+provide \code{family = binomial()}.
 }
 \examples{
 data(tehtuner_example)
