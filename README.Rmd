@@ -36,7 +36,7 @@ detecting a differential effect when the conditional average treatment effect is
 uniform across the study population.
 
 Currently `tehtuner` supports Virtual Twins models (Foster 
-et al., 2011) for detecting TEH.
+et al., 2011) for detecting TEH using the permutation procedure proposed in (Wolf et al., 2022).
 
 Virtual Twins is a two-step approach to detecting differential treatment
 effects. Subjects' conditional average treatment effects (CATEs) are first
@@ -69,8 +69,8 @@ devtools::install_github("jackmwolf/tehtuner")
 ```
 ## Example
 
-We consider simulated data from a small clinical trial with 200 subjects.
-Each subject has 10 measured covaraites, 8 continuous and 2 binary.
+We consider simulated data from a small clinical trial with 1000 subjects.
+Each subject has 10 measured covariates, 8 continuous and 2 binary.
 We are interested in estimating and understanding the CATE through Virtual Twins.
 
 ```{r}
@@ -89,19 +89,17 @@ vt_cate <- tunevt(
 ```
 
 The fitted Step 2 model can be accessed via `$vtmod`. 
-In this case, as we used a regression tree in Step 2, our final model model is of class `rpart`.
+In this case, as we used a regression tree in Step 2, our final model model is of class `rpart.object`.
 ```{r dev='CairoPNG', warning = FALSE}
 vt_cate$vtmod
 
-rpart.plot::rpart.plot(vt_cate$vtmod)
+rpart.plot::rpart.plot(vt_cate$vtmod, digits = -2)
 ```
 
-The fitted model for the CATE includes a covariate (`V1`), so we would conclude that there is treatment effect heterogeneity at the 20% level. 
-We note that the true data generating mechanism ($Y_i = h(X_i) + T_i g(X_i)$) included an interaction between the treatment and whether $V_1$ was above its true mean (sample mean `r round(mean(tehtuner_example$V1), 2)`) with $g(X_i) = c + 4I(V_{1i}>\mu_1)+4V_{9i}$. 
-So, the procedure did not make a Type-I error *and* correctly detected a covariate driving this heterogeneity.
+The fitted model for the CATE is a function of the covariates (`V1`, and `V3`), so we would conclude that there is treatment effect heterogeneity at the 20% level. 
 
 We can also look at the null distribution of the MNPP through `vt_cate$theta_null`.
-The 80th quantile of $\hat\theta$ under the null hypothesis is
+The 80th percentile of $\hat\theta$ under the null hypothesis is
 ```{r}
 quantile(vt_cate$theta_null, 0.8)
 ```
@@ -113,8 +111,8 @@ vt_cate$mnpp
 
 The procedure fit the Step 2 model using the 80th quantile of the null distribution which resulted in a model that included covariates since the MNPP was above the 80th quantile.
 
-```{r mnpp_plot, dev='CairoPNG', echo = FALSE, include = FALSE}
-p <- ggplot(mapping = aes(x = vt_cate$theta_null, y = ..density..)) +
+```{r mnpp_plot, dev='CairoPNG', echo = FALSE}
+ggplot(mapping = aes(x = vt_cate$theta_null, y = ..density..)) +
   geom_histogram(color = "black", fill = "white", binwidth = 0.025) +
   theme_minimal() +
   scale_y_continuous(expand = expansion(mult = c(0, 0.1))) +
@@ -141,10 +139,7 @@ p <- ggplot(mapping = aes(x = vt_cate$theta_null, y = ..density..)) +
   theme(
     plot.subtitle = element_markdown(size = 12)
   )
-ggsave("man/figures/README_mnpp_plot-2.png", plot = p, dpi = 700)
 ```
-
-![Histogram showing the null distribution of the MNPP for the example data](man/figures/README_mnpp_plot-2.png)
 
 ### Running in Parallel
 
