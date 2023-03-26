@@ -19,7 +19,8 @@ conditional average treatment effect is uniform across the study
 population.
 
 Currently `tehtuner` supports Virtual Twins models (Foster et al., 2011)
-for detecting TEH.
+for detecting TEH using the permutation procedure proposed in (Wolf et
+al., 2022).
 
 Virtual Twins is a two-step approach to detecting differential treatment
 effects. Subjects’ conditional average treatment effects (CATEs) are
@@ -55,8 +56,8 @@ devtools::install_github("jackmwolf/tehtuner")
 
 ## Example
 
-We consider simulated data from a small clinical trial with 200
-subjects. Each subject has 10 measured covaraites, 8 continuous and 2
+We consider simulated data from a small clinical trial with 1000
+subjects. Each subject has 10 measured covariates, 8 continuous and 2
 binary. We are interested in estimating and understanding the CATE
 through Virtual Twins.
 
@@ -79,56 +80,52 @@ vt_cate <- tunevt(
 
 The fitted Step 2 model can be accessed via `$vtmod`. In this case, as
 we used a regression tree in Step 2, our final model model is of class
-`rpart`.
+`rpart.object`.
 
 ``` r
 vt_cate$vtmod
-#> n= 200 
+#> n= 1000 
 #> 
 #> node), split, n, deviance, yval
 #>       * denotes terminal node
 #> 
-#> 1) root 200 4282.543  1.9449220  
-#>   2) V1< -1.081597 125 1418.895 -0.1780733 *
-#>   3) V1>=-1.081597 75 1361.278  5.4832470 *
+#> 1) root 1000 18372.4300  1.6830340  
+#>   2) V1< -3.008541 511  5643.7030 -0.3942647 *
+#>   3) V1>=-3.008541 489  8219.4140  3.8537890  
+#>     6) V3>=0.000282894 19   448.7299 -5.3806930 *
+#>     7) V3< 0.000282894 470  6084.9480  4.2270980 *
 
-rpart.plot::rpart.plot(vt_cate$vtmod)
+rpart.plot::rpart.plot(vt_cate$vtmod, digits = -2)
 ```
 
 <img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
 
-The fitted model for the CATE includes a covariate (`V1`), so we would
-conclude that there is treatment effect heterogeneity at the 20% level.
-We note that the true data generating mechanism
-($Y_i = h(X_i) + T_i g(X_i)$) included an interaction between the
-treatment and whether $V_1$ was above its true mean (sample mean -1.34)
-with $g(X_i) = c + 4I(V_{1i}>\mu_1)+4V_{9i}$. So, the procedure did not
-make a Type-I error *and* correctly detected a covariate driving this
-heterogeneity.
+The fitted model for the CATE is a function of the covariates (`V1`, and
+`V3`), so we would conclude that there is treatment effect heterogeneity
+at the 20% level.
 
 We can also look at the null distribution of the MNPP through
-`vt_cate$theta_null`. The 80th quantile of $\hat\theta$ under the null
+`vt_cate$theta_null`. The 80th percentile of $\hat\theta$ under the null
 hypothesis is
 
 ``` r
 quantile(vt_cate$theta_null, 0.8)
-#>       80% 
-#> 0.2317442
+#>        80% 
+#> 0.07673669
 ```
 
 while the MNPP of our observed data is
 
 ``` r
 vt_cate$mnpp
-#> [1] 0.3508124
+#> [1] 0.2454389
 ```
 
 The procedure fit the Step 2 model using the 80th quantile of the null
 distribution which resulted in a model that included covariates since
 the MNPP was above the 80th quantile.
 
-![Histogram showing the null distribution of the MNPP for the example
-data](man/figures/README_mnpp_plot-2.png)
+<img src="man/figures/README-mnpp_plot-1.png" width="100%" />
 
 ### Running in Parallel
 
