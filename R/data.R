@@ -1,9 +1,9 @@
 #' Simulated example data
 #'
-#' Simulated data from a clinical trial with heterogenous treatment effects
+#' Simulated data from a clinical trial with heterogeneous treatment effects
 #' where the CATE was a function of V1 and V9.
 #'
-#' @format A data frame with 200 rows and 12 columns:
+#' @format A data frame with 1000 rows and 12 columns:
 #' \describe{
 #'   \item{Trt}{Binary treatment indicator}
 #'   \item{Y}{Continuous response}
