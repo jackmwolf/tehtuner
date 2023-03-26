@@ -20,6 +20,10 @@
 #' of the distribution of is then used to fit the Step 2 model on the original
 #' data.
 #'
+#' Note that if `binary_Y` set to `TRUE` additional arguments might need to be
+#' passed through `...`. If `step1` is either `"lasso"` or `"superlearner"`,
+#' provide `family = binomial()`.
+#'
 #' @param data a data frame containing a response, binary treatment indicators,
 #'   and covariates.
 #' @param Trt a string specifying the name of the column of \code{data}
@@ -33,6 +37,7 @@
 #'   "\code{lasso}", "\code{rtree}", or "\code{ctree}".
 #' @param alpha0 the nominal Type I error rate.
 #' @param p_reps the number of permutations to run.
+#' @param binary_Y logical. Is the outcome Y binary?
 #' @param keepz logical. Should the estimated CATE from Step 1 be returned?
 #' @param parallel Should the loop over replications be parallelized? If
 #'   \code{FALSE}, then no, if \code{TRUE}, then yes.
@@ -74,7 +79,7 @@
 #' @export
 tunevt <- function(
   data, Y = "Y", Trt = "Trt", step1 = "randomforest", step2 = "rtree",
-  alpha0, p_reps, keepz = FALSE, parallel = FALSE, ...)
+  alpha0, p_reps, binary_Y = FALSE, keepz = FALSE, parallel = FALSE, ...)
   {
 
   cl <- match.call()
@@ -90,13 +95,13 @@ tunevt <- function(
   d1 <- subset_trt(data, value = 1, Trt = Trt)
 
   # Estimate marginal average treatment effect
-  zbar <- mean(d1[, 1]) - mean(d0[, 1])
+  zbar <- mean(d1[, Y]) - mean(d0[, Y])
 
   # Permutation to get the null distribution of the MNPP
   theta <- tune_theta(data = data, Trt = Trt, Y = Y, zbar = zbar,
                       step1 = step1, step2 = step2,
                       alpha0 = alpha0, p_reps = p_reps,
-                      parallel = parallel,
+                      binary_Y = binary_Y, parallel = parallel,
                       ...)
 
   # Fit Virtual Twins

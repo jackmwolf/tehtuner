@@ -4,7 +4,7 @@
 \alias{permute}
 \title{Generate a dataset with permuted treatment indicators}
 \usage{
-permute(data, Trt, Y, zbar)
+permute(data, Trt, Y, zbar, binary_Y)
 }
 \arguments{
 \item{data}{a data frame containing a response, binary treatment indicators,
@@ -17,6 +17,8 @@ contains the treatment indicators.}
 contains the response.}
 
 \item{zbar}{the estimated marginal treatment effect}
+
+\item{binary_Y}{logical. Is the outcome Y binary?}
 }
 \value{
 a permuted dataset of the same size as \code{data}

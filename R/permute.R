@@ -13,13 +13,13 @@
 #' @return the estimated penalty parameter
 #'
 tune_theta <- function(data, Trt, Y, zbar, step1, step2, alpha0, p_reps,
-                       parallel, ...) {
+                       binary_Y, parallel, ...) {
   # To pass ... to replicate()
   arg_list <- list(...)
   get_theta_null0 <- function(...) {
     get_theta_null(
       data = data, Trt = Trt, Y = Y, zbar = zbar,
-      step1 = step1, step2 = step2, ...
+      step1 = step1, step2 = step2, binary_Y = binary_Y, ...
     )
   }
 
@@ -54,13 +54,15 @@ tune_theta <- function(data, Trt, Y, zbar, step1, step2, alpha0, p_reps,
 #'
 #' @return a permuted dataset of the same size as \code{data}
 #'
-permute <- function(data, Trt, Y, zbar) {
+permute <- function(data, Trt, Y, zbar, binary_Y) {
 
-  A <- data[[Trt]] == 1
   data_p <- data
+  if (!binary_Y) {
+    A <- data[[Trt]] == 1
 
-  # Subtract marginal effect from those with Trt == 1 before permuting
-  data_p[[Y]][A] <- data[[Y]][A] - zbar
+    # Subtract marginal effect from those with Trt == 1 before permuting
+    data_p[[Y]][A] <- data[[Y]][A] - zbar
+  }
 
   # Permute treatment indicators
   data_p[[Trt]] <- sample(data_p[[Trt]], size = nrow(data))
@@ -74,9 +76,9 @@ permute <- function(data, Trt, Y, zbar) {
 #' @inheritParams tunevt
 #'
 #' @return the MNPP for the permuted data set
-get_theta_null <- function(data, Trt, Y, zbar, step1, step2, ...) {
+get_theta_null <- function(data, Trt, Y, zbar, step1, step2, binary_Y, ...) {
 
-  data_p <- permute(data, Trt = Trt, Y = Y, zbar)
+  data_p <- permute(data, Trt = Trt, Y = Y, zbar, binary_Y = binary_Y)
 
   # Estimate CATE on permuted data through Step 1 model
   vt1 <- get_vt1(step1)

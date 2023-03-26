@@ -38,13 +38,15 @@ vt1_lasso <- function(data, Trt, Y, ...) {
   e0 <- predict(
     m0,
     newx = data.matrix(subset(data, select = keep_x_pred)),
-    s = "lambda.1se"
+    s = "lambda.1se",
+    type = "response"
     )
 
   e1 <- predict(
     m1,
     newx = data.matrix(subset(data, select = keep_x_pred)),
-    s = "lambda.1se"
+    s = "lambda.1se",
+    type = "response"
   )
 
   # Estimated CATE

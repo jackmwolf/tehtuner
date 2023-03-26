@@ -12,6 +12,7 @@ tunevt(
   step2 = "rtree",
   alpha0,
   p_reps,
+  binary_Y = FALSE,
   keepz = FALSE,
   parallel = FALSE,
   ...
@@ -37,6 +38,8 @@ either "\code{lasso}", "\code{mars}", "\code{randomforest}", or
 \item{alpha0}{the nominal Type I error rate.}
 
 \item{p_reps}{the number of permutations to run.}
+
+\item{binary_Y}{logical. Is the outcome Y binary?}
 
 \item{keepz}{logical. Should the estimated CATE from Step 1 be returned?}
 
@@ -84,6 +87,10 @@ null penalty parameter (MNPP), which is the smallest penalty parameter that
 yields a Step 2 model with no covariate effects. The \code{1-alpha0} quantile
 of the distribution of is then used to fit the Step 2 model on the original
 data.
+
+Note that if \code{binary_Y} set to \code{TRUE} additional arguments might need to be
+passed through \code{...}. If \code{step1 == "lasso"}, provide \code{family = "binomial"}.
+If \verb{step1 == "superlearner}, provide \code{family = binomial()}.
 }
 \examples{
 data(tehtuner_example)
