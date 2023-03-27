@@ -10,3 +10,5 @@
 ^CRAN-SUBMISSION$
 ^revdep$
 ^vignettes/articles$
+paper.md
+paper.pdf
