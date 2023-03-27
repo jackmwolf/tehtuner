@@ -19,7 +19,7 @@ bibliography: inst/REFERENCES.bib
 
 Randomized clinical trials (RCTs) often test and describe the average treatment effect, or how the the candidate intervention is expected to increase or decrease an outcome of interest overall. However, secondary analyses may seek to identify ways in which underlying subject characteristics such as age or health status may modify the expected treatment effect, resulting in *treatment effect heterogeneity*.
 This function is called the conditional average treatment effect (CATE) and is defined as
-\[\tau(\boldsymbol{x})= \operatorname{E}\left(Y^1-Y^0|\boldsymbol{X}=\boldsymbol{x}\right) \]
+$$\tau(\boldsymbol{x})= \operatorname{E}\left(Y^1-Y^0|\boldsymbol{X}=\boldsymbol{x}\right)$$
 where $\boldsymbol{x}$ is a vector of covariate measurements and $Y^1$ and $Y^0$ are the potential outcomes that would be observed under the treatment and control arms, respectively.
 Information about the CATE can then be used to determine the optimal treatment on a subject-to-subject basis (personalized medicine) or identify sub-populations for whom additional interventions or support are needed.
 
