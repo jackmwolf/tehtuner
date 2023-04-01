@@ -46,7 +46,7 @@
 #'   See the \code{\link[foreach]{foreach}} documentation for more details.
 #' @param ... additional arguments to the Step 1 model call.
 #'
-#' @return an object of class \code{"tunevt"}.
+#' @return An object of class \code{"tunevt"}.
 #'
 #'   An object of class \code{"tunevt"} is a list containing at least the
 #'   following components:
@@ -58,6 +58,9 @@
 #'     \item{mnpp}{the MNPP for the estimated CATEs from Step 1.}
 #'     \item{theta_null}{a vector of the MNPPs from each permutation under
 #'       the null hypothesis.}
+#'     \item{pvalue}{the probability of observing a MNPP as or more extreme
+#'       as the observed MNPP under the null hypothesis of no effect
+#'       heterogeneity.}
 #'     \item{z}{if \code{keepz = TRUE}, the estimated CATEs from the
 #'       \code{step1} model.}
 #' @importFrom Rdpack reprompt
@@ -73,6 +76,7 @@
 #'
 #' @examples
 #' data(tehtuner_example)
+#' # Low p_reps for example use only
 #' tunevt(
 #'   tehtuner_example, step1 = "lasso", step2 = "rtree",
 #'   alpha0 = 0.2, p_reps = 5
@@ -122,10 +126,14 @@ tunevt <- function(
   # MNPP for the original data
   mnpp <- get_mnpp(z = z, data = data, step2 = step2, Trt = Trt, Y = Y, threshold = threshold)
 
+  # P-value:
+  pvalue <- mean(theta$theta_grid > mnpp)
+
   re <- list(
     vtmod = mod,
     theta_null = theta$theta_grid,
-    mnpp = mnpp
+    mnpp = mnpp,
+    pvalue = pvalue
   )
 
   re$call <- cl
@@ -138,4 +146,48 @@ tunevt <- function(
 
   return(re)
 
+}
+
+#' Print an object of class tunevt
+#'
+#' Prints a Virtual Twins model for the conditional average treatment effect
+#' with a tuned Step 2 model.
+#'
+#' @method print tunevt
+#'
+#' @param x an object of class \code{tunevt}
+#' @param digits the number of significant digits to use when printing.
+#' @param ... further arguments passed to or from other methods.
+#'
+#' @export
+#' @inherit tunevt return
+print.tunevt <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
+
+  cat("Call:\n", paste(deparse(x$call),
+                         sep = "\n",
+                         collapse = "\n"
+  ), "\n", sep = "")
+
+  cat("\nStep 2", paste0('"', x$call$step2, '"'), "model:\n")
+  if (x$call$step2 == "lasso") {
+    print(coef(x$vtmod), ...)
+  } else {
+    print(x$vtmod, ...)
+  }
+  cat("\n")
+
+  quant <- 1 - x$call$alpha0
+  quantval <- unname(
+    quantile(x$theta_null, probs = quant, na.rm = TRUE, type = 2))
+
+  cat(
+    "Approximate ",
+    trimws(formatC(quant, digits)), " quantile of the MNPP null distribution: ",
+    formatC(quantval, digits),
+    "\nObserved MNPP: ", formatC(x$mnpp, digits),
+    ",\tp-value: ", format.pval(x$pvalue),
+    sep = ""
+    )
+  cat("\n")
+  invisible(x)
 }
