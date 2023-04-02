@@ -41,4 +41,3 @@ Language: en-US
 URL: https://github.com/jackmwolf/tehtuner
 BugReports: https://github.com/jackmwolf/tehtuner/issues
 Config/testthat/edition: 3
-VignetteBuilder: knitr

@@ -5,6 +5,8 @@
 Adds support for classification trees in Step 2 by setting 
 `step2 = 'classtree'` with a given threshold of `threshold`.
 
+Adds the `print.tunevt` method.
+
 # tehtuner 0.2.1
 
 Fixes a bug where `zbar` was calculated using the mean difference in the first

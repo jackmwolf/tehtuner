@@ -5,6 +5,8 @@ test_that(
     names(dat)[names(dat) == "Trt"] <- "A"
     names(dat)[names(dat) == "Y"] <- "Outcome"
 
+    set.seed(1)
+
     expect_no_error(
       tunevt(
         data = dat, Y = "Outcome", Trt = "A",

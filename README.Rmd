@@ -112,14 +112,14 @@ vt_cate$mnpp
 The procedure fit the Step 2 model using the 80th quantile of the null distribution which resulted in a model that included covariates since the MNPP was above the 80th quantile.
 
 ```{r mnpp_plot, dev='CairoPNG', echo = FALSE}
-ggplot(mapping = aes(x = vt_cate$theta_null, y = ..density..)) +
+ggplot(mapping = aes(x = vt_cate$theta_null, y = after_stat(density))) +
   geom_histogram(color = "black", fill = "white", binwidth = 0.025) +
   theme_minimal() +
   scale_y_continuous(expand = expansion(mult = c(0, 0.1))) +
   geom_vline(
     aes(xintercept = c(vt_cate$mnpp, quantile(vt_cate$theta_null, 0.8))),
     color = c("#0072B2", "#D55E00"),
-    size = 2,
+    linewidth = 2,
     linetype = 2
   ) + 
   labs(
