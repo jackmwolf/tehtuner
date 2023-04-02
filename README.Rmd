@@ -86,6 +86,7 @@ vt_cate <- tunevt(
   data = tehtuner_example, Y = "Y", Trt = "Trt", step1 = "randomforest",
   step2 = "rtree", alpha0 = 0.2, p_reps = 100, ntree = 50
 )
+vt_cate
 ```
 
 The fitted Step 2 model can be accessed via `$vtmod`. 

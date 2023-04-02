@@ -76,6 +76,25 @@ vt_cate <- tunevt(
   data = tehtuner_example, Y = "Y", Trt = "Trt", step1 = "randomforest",
   step2 = "rtree", alpha0 = 0.2, p_reps = 100, ntree = 50
 )
+vt_cate
+#> Call:
+#> tunevt(data = tehtuner_example, Y = "Y", Trt = "Trt", step1 = "randomforest", 
+#>     step2 = "rtree", alpha0 = 0.2, p_reps = 100, ntree = 50)
+#> 
+#> Step 2 "rtree" model:
+#> n= 1000 
+#> 
+#> node), split, n, deviance, yval
+#>       * denotes terminal node
+#> 
+#> 1) root 1000 18372.4300  1.6830340  
+#>   2) V1< -3.008541 511  5643.7030 -0.3942647 *
+#>   3) V1>=-3.008541 489  8219.4140  3.8537890  
+#>     6) V3>=0.000282894 19   448.7299 -5.3806930 *
+#>     7) V3< 0.000282894 470  6084.9480  4.2270980 *
+#> 
+#> Approximate 0.8 quantile of the MNPP null distribution: 0.07695
+#> Observed MNPP: 0.2454,   p-value: < 2.22e-16
 ```
 
 The fitted Step 2 model can be accessed via `$vtmod`. In this case, as
@@ -124,6 +143,11 @@ vt_cate$mnpp
 The procedure fit the Step 2 model using the 80th quantile of the null
 distribution which resulted in a model that included covariates since
 the MNPP was above the 80th quantile.
+
+    #> Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+    #> ℹ Please use `linewidth` instead.
+    #> Warning: The dot-dot notation (`..density..`) was deprecated in ggplot2 3.4.0.
+    #> ℹ Please use `after_stat(density)` instead.
 
 <img src="man/figures/README-mnpp_plot-1.png" width="100%" />
 
