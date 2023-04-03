@@ -86,6 +86,7 @@ vt_cate <- tunevt(
   data = tehtuner_example, Y = "Y", Trt = "Trt", step1 = "randomforest",
   step2 = "rtree", alpha0 = 0.2, p_reps = 100, ntree = 50
 )
+vt_cate
 ```
 
 The fitted Step 2 model can be accessed via `$vtmod`. 
@@ -143,7 +144,7 @@ ggplot(mapping = aes(x = vt_cate$theta_null, y = after_stat(density))) +
 
 ### Running in Parallel
 
-Development version `0.1.1.9001` added the `parallel` option to `tunevt()` which allows the user to perform the permutation procedure in parallel to reduce computation times. 
+Version `0.2.0` added the `parallel` option to `tunevt()` which allows the user to perform the permutation procedure in parallel to reduce computation times. 
 Before doing so, you must register a parallel backend; see `?foreach::foreach` for more information.
 
 For example, to carry out 100 permutations across 2 processors:
