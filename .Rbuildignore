@@ -11,3 +11,4 @@
 ^revdep$
 ^vignettes/articles$
 ^CODE_OF_CONDUCT\.md$
+^CONTRIBUTING\.md$
