@@ -1,4 +1,8 @@
-# tehtuner (development version)
+# tehtuner 0.3.1
+
+Release corresponding to JOSS paper. 
+Adds automated testing for Step 1 wrapper functions (e.g., `vt1_lasso`) and
+`get_mnpp`.
 
 # tehtuner 0.3.0
 
