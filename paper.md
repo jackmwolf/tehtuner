@@ -9,7 +9,7 @@ authors:
     orcid: 0000-0002-8919-8740
     affiliation: 1 # (Multiple affiliations must be quoted)
 affiliations:
-  - name: University of Minnesota Division of Biostatistics, USA
+  - name: University of Minnesota Division of Biostatistics, United States of America
     index: 1
 date: 26 March 2023
 bibliography: inst/REFERENCES.bib
