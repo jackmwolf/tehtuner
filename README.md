@@ -7,8 +7,7 @@
 
 [![CRAN
 status](https://www.r-pkg.org/badges/version/tehtuner)](https://CRAN.R-project.org/package=tehtuner)
-![CRAN
-Downloads](https://cranlogs.r-pkg.org/badges/grand-total/tehtuner)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.05453/status.svg)](https://doi.org/10.21105/joss.05453)
 [![R-CMD-check](https://github.com/jackmwolf/tehtuner/workflows/R-CMD-check/badge.svg)](https://github.com/jackmwolf/tehtuner/actions)
 <!-- badges: end -->
 
@@ -176,9 +175,13 @@ parallel::stopCluster(cl)
 - Wolf, J. M., Koopmeiners, J. S., & Vock, D. M. (2022). A permutation
   procedure to detect heterogeneous treatment effects in randomized
   clinical trials while controlling the type-I error rate. *Clinical
-  Trials 19*(5). <https://doi.org/10.1177/17407745221095855>
+  Trials, 19*(5). <https://doi.org/10.1177/17407745221095855>
 
 - Deng C., Wolf J. M., Vock D. M., Carroll D. M., Hatsukami D. K., Leng
   N., & Koopmeiners J. S. (2023). “Practical guidance on modeling
   choices for the virtual twins method.” *Journal of Biopharmaceutical
-  Statistics*. <https://doi.org/10.1080/10543406.2023.2170404>.
+  Statistics*. <https://doi.org/10.1080/10543406.2023.2170404>
+
+- Wolf, J. M., (2023). tehtuner: An R package to fit and tune models for
+  the conditional average treatment effect. *Journal of Open Source
+  Software, 8*(86), 5453. <https://doi.org/10.21105/joss.05453>

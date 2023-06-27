@@ -26,7 +26,7 @@ library(rpart.plot)
 
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/tehtuner)](https://CRAN.R-project.org/package=tehtuner)
-![CRAN Downloads](https://cranlogs.r-pkg.org/badges/grand-total/tehtuner)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.05453/status.svg)](https://doi.org/10.21105/joss.05453)
 [![R-CMD-check](https://github.com/jackmwolf/tehtuner/workflows/R-CMD-check/badge.svg)](https://github.com/jackmwolf/tehtuner/actions)
 <!-- badges: end -->
 
@@ -166,6 +166,8 @@ parallel::stopCluster(cl)
 
 - Foster, J. C., Taylor, J. M., & Ruberg, S. J. (2011). Subgroup identification from randomized clinical trial data. _Statistics in Medicine, 30_(24), 2867–2880. https://doi.org/10.1002/sim.4322
 
-- Wolf, J. M., Koopmeiners, J. S., & Vock, D. M. (2022). A permutation procedure to detect heterogeneous treatment effects in randomized clinical trials while controlling the type-I error rate. _Clinical Trials 19_(5). https://doi.org/10.1177/17407745221095855
+- Wolf, J. M., Koopmeiners, J. S., & Vock, D. M. (2022). A permutation procedure to detect heterogeneous treatment effects in randomized clinical trials while controlling the type-I error rate. _Clinical Trials, 19_(5). https://doi.org/10.1177/17407745221095855
 
-- Deng C., Wolf J. M., Vock D. M., Carroll D. M., Hatsukami D. K., Leng N., & Koopmeiners J. S. (2023). “Practical guidance on modeling choices for the virtual twins method.” _Journal of Biopharmaceutical Statistics_. https://doi.org/10.1080/10543406.2023.2170404.
+- Deng C., Wolf J. M., Vock D. M., Carroll D. M., Hatsukami D. K., Leng N., & Koopmeiners J. S. (2023). “Practical guidance on modeling choices for the virtual twins method.” _Journal of Biopharmaceutical Statistics_. https://doi.org/10.1080/10543406.2023.2170404
+
+- Wolf, J. M., (2023). tehtuner: An R package to fit and tune models for the conditional average treatment effect. _Journal of Open Source Software, 8_(86), 5453. https://doi.org/10.21105/joss.05453

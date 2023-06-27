@@ -11,3 +11,17 @@ bibentry(
   pages = "512-521",
   doi = "10.1177/17407745221095855",
 )
+
+bibentry(
+  "Article",
+  title = "tehtuner: {An} {R} package to fit and tune models for the conditional average treatment effect",
+	volume = 8,
+	issn = "2475-9066",
+	doi = "10.21105/joss.05453",
+	number = 86,
+	journal = "Journal of Open Source Software",
+	author = "Jack M Wolf",
+	month = "jun",
+	year = 2023,
+	pages = 5453
+)
