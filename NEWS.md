@@ -1,3 +1,7 @@
+# tehtuner 0.3.2
+
+Minor documentation updates following JOSS publication.
+
 # tehtuner 0.3.1
 
 Release corresponding to JOSS paper. 
