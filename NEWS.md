@@ -1,3 +1,11 @@
+# tehtuner 0.3.3
+
+Fixes a bug when using `step1 = "lasso"` where columns were being subset
+incorrectly when creating the design matrix for `glmnet::cv.glmnet`.
+
+Fixes a bug when using `step1 = "lasso"` where factor variables were treated
+as numeric. Factors are appropriately now converted into indicator variables.
+
 # tehtuner 0.3.2
 
 Minor documentation updates following JOSS publication.

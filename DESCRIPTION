@@ -1,6 +1,6 @@
 Package: tehtuner
 Title: Fit and Tune Models to Detect Treatment Effect Heterogeneity
-Version: 0.3.2
+Version: 0.3.3
 Authors@R: 
     person(given = "Jack",
            family = "Wolf",
@@ -18,7 +18,7 @@ License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.3.2
 Depends: 
     R (>= 3.5.0)
 Imports: 
