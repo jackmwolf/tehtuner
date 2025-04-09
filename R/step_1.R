@@ -7,7 +7,7 @@
 #' @return Estimated CATEs for each subject in \code{data}.
 #'
 #' @importFrom glmnet cv.glmnet
-#' @importFrom stats predict
+#' @importFrom stats predict model.matrix
 #'
 #' @family VT Step 1 functions
 #'
@@ -16,34 +16,38 @@ vt1_lasso <- function(data, Trt, Y, ...) {
   d0 <- subset_trt(data, value = 0, Trt = Trt)
   d1 <- subset_trt(data, value = 1, Trt = Trt)
 
-
   keep_x_fit <- !(names(d0) %in% c(Y, Trt))
+
   # Fit glmnet
   m0 <- glmnet::cv.glmnet(
-    x = data.matrix(subset(d0, select = keep_x_fit)),
+    x = data.matrix(
+      model.matrix(~ 0 + ., data = subset(d0, select = keep_x_fit))),
     y = d0[[Y]],
     weights = NULL,
     ...
     )
 
   m1 <- glmnet::cv.glmnet(
-    x = data.matrix(subset(d1, select = keep_x_fit)),
+    x = data.matrix(
+      model.matrix(~ 0 + ., data = subset(d1, select = keep_x_fit))),
     y = d1[[Y]],
     weights = NULL,
     ...
   )
 
-  keep_x_pred <- !(names(d0) %in% c(Y, Trt))
+  keep_x_pred <- !(names(data) %in% c(Y, Trt))
+  data_pred <- subset(data, select = keep_x_pred)
+
   # Estimated expectation under control and treatment
   e0 <- predict(
     m0,
-    newx = data.matrix(subset(data, select = keep_x_pred)),
+    newx = data.matrix(model.matrix(~ 0 + ., data = data_pred)),
     s = "lambda.1se"
     )
 
   e1 <- predict(
     m1,
-    newx = data.matrix(subset(data, select = keep_x_pred)),
+    newx = data.matrix(model.matrix(~ 0 + ., data = data_pred)),
     s = "lambda.1se"
   )
 

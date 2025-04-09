@@ -26,7 +26,7 @@ test_that(
     keep_x_fit <- !(names(d0) %in% c("Y", "Trt"))
     dx0 <- subset(d0, select = keep_x_fit)
     dx1 <- subset(d1, select = keep_x_fit)
-    dx <- subset(data, select = keep_x_fit)
+    dx <- subset(data, select = !(names(data) %in% c("Y", "Trt")))
 
     # Lasso --------------------------------------------------------------------
     # Using wrapper
